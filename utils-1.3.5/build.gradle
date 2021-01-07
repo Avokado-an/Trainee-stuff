@@ -1,0 +1,32 @@
+plugins {
+    id 'java-library'
+}
+
+group 'org.example'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation(platform('org.junit:junit-bom:5.7.0'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+jar {
+    manifest {
+        attributes("Implementation-Title": "utils",
+                "Implementation-Version": "1.0.0")
+    }
+    from configurations.compile.collect {zipTree it}
+}
