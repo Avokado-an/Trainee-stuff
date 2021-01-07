@@ -1,0 +1,46 @@
+com/epam/esm/repository/mapper/TagMapper.java
+ com.epam.esm.repository.mapper.TagMapper
+com/epam/esm/config/AppConfig.java
+ com.epam.esm.config.AppConfig
+com/epam/esm/repository/GiftTagMappingRepository.java
+ com.epam.esm.repository.GiftTagMappingRepository
+com/epam/esm/model/dto/IdDto.java
+ com.epam.esm.model.dto.IdDto
+com/epam/esm/controller/GiftCertificateController.java
+ com.epam.esm.controller.GiftCertificateController
+com/epam/esm/model/type/SortTypeQuery.java
+ com.epam.esm.model.type.SortTypeQuery
+com/epam/esm/repository/mapper/GiftCertificateMapper.java
+ com.epam.esm.repository.mapper.GiftCertificateMapper
+com/epam/esm/service/impl/TagServiceImplementation.java
+ com.epam.esm.service.impl.TagServiceImplementation
+com/epam/esm/controller/TagCertificateController.java
+ com.epam.esm.controller.TagCertificateController
+com/epam/esm/model/GiftCertificate.java
+ com.epam.esm.model.GiftCertificate
+com/epam/esm/repository/CrdRepository.java
+ com.epam.esm.repository.CrdRepository
+com/epam/esm/repository/CrudRepository.java
+ com.epam.esm.repository.CrudRepository
+com/epam/esm/repository/TransactionManager.java
+ com.epam.esm.repository.TransactionManager
+com/epam/esm/model/dto/CertificateFilterDto.java
+ com.epam.esm.model.dto.CertificateFilterDto
+com/epam/esm/model/dto/CreateTagDto.java
+ com.epam.esm.model.dto.CreateTagDto
+com/epam/esm/model/dto/CreateGiftCertificateDto.java
+ com.epam.esm.model.dto.CreateGiftCertificateDto
+com/epam/esm/model/Tag.java
+ com.epam.esm.model.Tag
+com/epam/esm/repository/TagRepository.java
+ com.epam.esm.repository.TagRepository
+com/epam/esm/model/dto/UpdateGiftCertificateDto.java
+ com.epam.esm.model.dto.UpdateGiftCertificateDto
+com/epam/esm/service/TagService.java
+ com.epam.esm.service.TagService
+com/epam/esm/service/GiftCertificateService.java
+ com.epam.esm.service.GiftCertificateService
+com/epam/esm/repository/GiftCertificateRepository.java
+ com.epam.esm.repository.GiftCertificateRepository
+com/epam/esm/service/impl/GiftCertificateServiceImplementation.java
+ com.epam.esm.service.impl.GiftCertificateServiceImplementation
