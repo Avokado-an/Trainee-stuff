@@ -10,8 +10,8 @@ com/epam/esm/controller/GiftCertificateController.java
  com.epam.esm.controller.GiftCertificateController
 com/epam/esm/model/type/SortTypeQuery.java
  com.epam.esm.model.type.SortTypeQuery
-com/epam/esm/repository/mapper/GiftCertificateMapper.java
- com.epam.esm.repository.mapper.GiftCertificateMapper
+com/epam/esm/service/impl/GiftCertificateServiceImplementation.java
+ com.epam.esm.service.impl.GiftCertificateServiceImplementation
 com/epam/esm/service/impl/TagServiceImplementation.java
  com.epam.esm.service.impl.TagServiceImplementation
 com/epam/esm/controller/TagCertificateController.java
@@ -42,5 +42,5 @@ com/epam/esm/service/GiftCertificateService.java
  com.epam.esm.service.GiftCertificateService
 com/epam/esm/repository/GiftCertificateRepository.java
  com.epam.esm.repository.GiftCertificateRepository
-com/epam/esm/service/impl/GiftCertificateServiceImplementation.java
- com.epam.esm.service.impl.GiftCertificateServiceImplementation
+com/epam/esm/repository/mapper/GiftCertificateMapper.java
+ com.epam.esm.repository.mapper.GiftCertificateMapper

@@ -17,18 +17,8 @@ n
 >src/main/java/com/epam/esm/model/dto/CertificateFilterDto.java,1\e\1e44c98ff63ae02937a501c9ccc4114ba9ff2b21
 O
 src/main/webapp/WEB-INF/web.xml,2\e\2e22b6edd746fa3dc40ad7276c87c8d87d72a392
-^
-.src/main/webapp/WEB-INF/My Servlet-servlet.xml,5\c\5ca20f4503f356898a299020d5aa468b72d91acd
 <
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
-k
-;src/main/java/com/epam/esm/config/SpringWebInitializer.java,a\3\a3dc42659eaf82eb279f530de8a3d08938860d6d
-g
-7src/main/java/com/epam/esm/config/SpringJdbcConfig.java,4\8\48901668f5a6b3e8919aa3c26fce65049b1c7936
-`
-0src/main/java/com/epam/esm/config/WebConfig.java,a\1\a155a69462942f4620f0761df8e08cc03bc74863
-h
-8src/main/java/com/epam/esm/config/WebAppInitializer.java,4\1\411dd42ba1e3d63b6981e2d61431d72fa45c66f4
 t
 Dsrc/main/java/com/epam/esm/controller/GiftCertificateController.java,2\7\27262588a515993d7176d3d0c9a3db064645839b
 s
@@ -51,3 +41,13 @@ n
 >src/main/java/com/epam/esm/service/GiftCertificateService.java,3\2\32ac562018e6030e3d9e8525dda136be68f160e0
 b
 2src/main/java/com/epam/esm/service/TagService.java,4\6\468f321eb98e0f6fb888f2bcfbd83e782803138e
+`
+0src/main/java/com/epam/esm/config/AppConfig.java,c\e\ce37a86d92d448a29c626a1eb85aa04080c8f78e
+k
+;src/main/java/com/epam/esm/repository/mapper/TagMapper.java,3\8\382d9845baf278c9c4e679e16c8535d18de8740f
+f
+6src/main/java/com/epam/esm/model/dto/CreateTagDto.java,4\d\4d32948ecfac6edfe2ec690c166e807a14c08c22
+w
+Gsrc/main/java/com/epam/esm/repository/mapper/GiftCertificateMapper.java,e\9\e9cc70c4fb6bc8479dadb3f7fe1f8505647eaa51
+s
+Csrc/main/java/com/epam/esm/repository/GiftTagMappingRepository.java,2\f\2f5848ba681e03d7d058181307fa0e58b55adef7

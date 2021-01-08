@@ -3,13 +3,15 @@ package com.epam.esm.repository;
 import com.epam.esm.model.GiftCertificate;
 import com.epam.esm.model.Tag;
 import com.epam.esm.repository.mapper.GiftCertificateMapper;
-import com.epam.esm.repository.mapper.TagMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -22,16 +24,15 @@ public class GiftCertificateRepository implements CrudRepository<GiftCertificate
             "duration = ?, last_update_date = ? WHERE id = ?";
     private static final String SELECT_ALL = "SELECT * FROM gift_certificate";
     private static final String SELECT_BY_INDEX = SELECT_ALL + " WHERE id = ?";
-    private static final String SELECT_CERTIFICATE_TAGS = "SELECT * FROM tag " +
-            "INNER JOIN gift_certificate_tag ON gift_certificate_tag.tag_id = tag.id " +
-            "WHERE gift_certificate_tag.gift_certificate_id = ?";
     private static final String REMOVE_BY_INDEX = "DELETE FROM gift_certificate WHERE id = ?";
 
     private JdbcTemplate jdbcTemplate;
+    private TagRepository tagRepository;
 
     @Autowired
-    public GiftCertificateRepository(DataSource dataSource) {
+    public GiftCertificateRepository(DataSource dataSource, TagRepository tagRepository) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.tagRepository = tagRepository;
     }
 
     @Override
@@ -44,12 +45,19 @@ public class GiftCertificateRepository implements CrudRepository<GiftCertificate
     }
 
     @Override
-    public boolean create(GiftCertificate giftCertificate) {
-        Object[] args = new Object[]{giftCertificate.getName(), giftCertificate.getDescription(),
-                giftCertificate.getPrice(), giftCertificate.getDuration(), giftCertificate.getCreationDate(),
-                giftCertificate.getLastUpdateDate()};
-        int createdCertificatesCount = jdbcTemplate.update(INSERT, args);
-        return createdCertificatesCount == 1;
+    public GeneratedKeyHolder create(GiftCertificate giftCertificate) {
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(con -> {
+            PreparedStatement preparedStatement = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, giftCertificate.getName());
+            preparedStatement.setString(2, giftCertificate.getDescription());
+            preparedStatement.setLong(3, giftCertificate.getPrice());
+            preparedStatement.setInt(4, giftCertificate.getDuration());
+            preparedStatement.setObject(5, giftCertificate.getCreationDate());
+            preparedStatement.setObject(6, giftCertificate.getLastUpdateDate());
+            return preparedStatement;
+        }, keyHolder);
+        return keyHolder;
     }
 
     @Override
@@ -59,8 +67,7 @@ public class GiftCertificateRepository implements CrudRepository<GiftCertificate
             GiftCertificate certificate =
                     jdbcTemplate.queryForObject(SELECT_BY_INDEX, new Object[]{index}, new GiftCertificateMapper());
             if (certificate != null) {
-                Set<Tag> certificateTags =
-                        new HashSet<>(jdbcTemplate.query(SELECT_CERTIFICATE_TAGS, new TagMapper(), certificate.getId()));
+                Set<Tag> certificateTags = tagRepository.readCertificateTags(certificate.getId());
                 certificate.setTags(certificateTags);
                 resultWrapper = Optional.of(certificate);
             }
@@ -74,8 +81,7 @@ public class GiftCertificateRepository implements CrudRepository<GiftCertificate
     public Set<GiftCertificate> read() {
         Set<GiftCertificate> certificates = new HashSet<>(jdbcTemplate.query(SELECT_ALL, new GiftCertificateMapper()));
         for (GiftCertificate certificate : certificates) {
-            Set<Tag> certificateTags =
-                    new HashSet<>(jdbcTemplate.query(SELECT_CERTIFICATE_TAGS, new TagMapper(), certificate.getId()));
+            Set<Tag> certificateTags = tagRepository.readCertificateTags(certificate.getId());
             certificate.setTags(certificateTags);
         }
         return certificates;

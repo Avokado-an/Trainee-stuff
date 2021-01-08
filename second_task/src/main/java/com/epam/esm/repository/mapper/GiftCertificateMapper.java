@@ -2,13 +2,10 @@ package com.epam.esm.repository.mapper;
 
 
 import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.model.Tag;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GiftCertificateMapper implements RowMapper<GiftCertificate> {
     @Override

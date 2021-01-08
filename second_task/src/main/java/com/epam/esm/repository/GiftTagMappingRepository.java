@@ -1,15 +1,15 @@
 package com.epam.esm.repository;
 
 import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.math.BigInteger;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Repository
 public class GiftTagMappingRepository {
@@ -28,15 +28,10 @@ public class GiftTagMappingRepository {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public boolean createCertificate(GiftCertificate giftCertificate) {
-        boolean wasOperationValid = true;
-        Set<Tag> certificateTags = giftCertificate.getTags();
-        for (Tag tag : certificateTags) {
-            if (jdbcTemplate.update(INSERT, giftCertificate.getId(), tag.getId()) <= 0) {
-                wasOperationValid = false;
-            }
+    public void createCertificate(BigInteger certificateKey, List<BigInteger> tagKeys) {
+        for (BigInteger currentKey : tagKeys) {
+            jdbcTemplate.update(INSERT, certificateKey, currentKey);
         }
-        return wasOperationValid;
     }
 
     public boolean deleteTag(long tagId) {
@@ -47,19 +42,19 @@ public class GiftTagMappingRepository {
         return jdbcTemplate.update(DELETE_CERTIFICATE, certificateId) > 0;
     }
 
-    public boolean updateCertificate(GiftCertificate giftCertificate) {
+    public boolean updateCertificate(GiftCertificate giftCertificate, Set<BigInteger> tagKeys) {
         boolean wasOperationSuccessful = true;
-        Set<Long> updatedTags = giftCertificate.getTags().stream().map(Tag::getId).collect(Collectors.toSet());
-        Set<Long> existingTags = new HashSet<>(jdbcTemplate.queryForList(SELECT_CERTIFICATE_TAGS, Long.class, giftCertificate.getId()));
-        for (Long tagId : updatedTags) {
-            if (!existingTags.contains(tagId) && wasOperationSuccessful) {
-                if (jdbcTemplate.update(INSERT, giftCertificate.getId(), tagId) <= 0) {
+        Set<BigInteger> existingTags = new HashSet<>(
+                jdbcTemplate.queryForList(SELECT_CERTIFICATE_TAGS, BigInteger.class, giftCertificate.getId()));
+        for (BigInteger currentTagKey : tagKeys) {
+            if (!existingTags.contains(currentTagKey)) {
+                if (jdbcTemplate.update(INSERT, giftCertificate.getId(), currentTagKey) <= 0) {
                     wasOperationSuccessful = false;
                 }
             }
         }
-        for (Long tagId : existingTags) {
-            if (!updatedTags.contains(tagId) && wasOperationSuccessful) {
+        for (BigInteger tagId : existingTags) {
+            if (!tagKeys.contains(tagId)) {
                 if (jdbcTemplate.update(DELETE_BY_CERTIFICATE_AND_TAG, giftCertificate.getId(), tagId) <= 0) {
                     wasOperationSuccessful = false;
                 }

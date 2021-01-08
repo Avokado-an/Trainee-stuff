@@ -3,9 +3,13 @@ package com.epam.esm.repository;
 import com.epam.esm.model.GiftCertificate;
 import com.epam.esm.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import java.math.BigInteger;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class TransactionManager {//todo create normal transactions
@@ -28,55 +32,63 @@ public class TransactionManager {//todo create normal transactions
         this.giftTagMappingRepository = giftTagMappingRepository;
     }
 
-    public boolean createCertificate(GiftCertificate certificate) {//todo should I work with connection itself and disable auto commit until finish transaction
+    @Transactional
+    public void createCertificate(GiftCertificate certificate) {
         Set<Tag> existingTags = tagRepository.read();
         Set<Tag> requiredTags = certificate.getTags();
-        boolean wasCreated = true;
+        List<BigInteger> tagKeys = new ArrayList<>();
+        BigInteger certificateKey;
         for (Tag tag : requiredTags) {
-            if (!existingTags.contains(tag) && wasCreated) {
-                wasCreated = tagRepository.create(tag);
+            if (!existingTags.contains(tag)) {
+                GeneratedKeyHolder currentKey = tagRepository.create(tag);
+                tagKeys.add(BigInteger.valueOf(currentKey.getKey().longValue()));
+            } else {
+                Tag existingTag = existingTags.stream().filter(t -> t.getName().equals(tag.getName())).findFirst().get();
+                tagKeys.add(BigInteger.valueOf(existingTag.getId()));
             }
         }
-        if (wasCreated) {
-            wasCreated = giftCertificateRepository.create(certificate);
-        }
-        if (wasCreated) {
-            wasCreated = giftTagMappingRepository.createCertificate(certificate);
-        }
-        return wasCreated;
+        certificateKey = BigInteger.valueOf(giftCertificateRepository.create(certificate).getKey().longValue());
+        giftTagMappingRepository.createCertificate(certificateKey, tagKeys);
     }
 
-    public boolean updateCertificate(GiftCertificate certificate) {//todo should I work with connection itself and disable auto commit until finish transaction
+    @Transactional
+    public void updateCertificate(GiftCertificate certificate) {
         Set<Tag> existingTags = tagRepository.read();
         Set<Tag> requiredTags = certificate.getTags();
-        boolean wasCreated = true;
+        Set<BigInteger> tagKeys = new HashSet<>();
         for (Tag tag : requiredTags) {
-            if (!existingTags.contains(tag) && wasCreated) {
-                wasCreated = tagRepository.create(tag);
+            if (!existingTags.contains(tag)) {
+                GeneratedKeyHolder currentTagKey = tagRepository.create(tag);
+                tagKeys.add(BigInteger.valueOf(currentTagKey.getKey().longValue()));
             }
         }
-        if (wasCreated) {
-            wasCreated = giftTagMappingRepository.updateCertificate(certificate);
-        }
-        if (wasCreated) {
-            giftCertificateRepository.update(certificate);
-        }
-        return wasCreated;
+        tagKeys.addAll(findUpdatedCertificateTagsId(certificate));
+        Optional<GiftCertificate> updatedCertificate = giftCertificateRepository.update(certificate);
+        updatedCertificate.ifPresent(giftCertificate ->
+                giftTagMappingRepository.updateCertificate(giftCertificate, tagKeys));
     }
 
-    public boolean deleteTag(long index) {
-        boolean wasDeleted = giftTagMappingRepository.deleteTag(index);
-        if (wasDeleted) {
-            wasDeleted = tagRepository.delete(index);
-        }
-        return wasDeleted;
+    @Transactional
+    public void deleteTag(long index) {
+        giftTagMappingRepository.deleteTag(index);
+        tagRepository.delete(index);
     }
 
-    public boolean deleteCertificate(long index) {
-        boolean wasDeleted = giftTagMappingRepository.deleteCertificate(index);
-        if (wasDeleted) {
-            wasDeleted = giftCertificateRepository.delete(index);
+    @Transactional
+    public void deleteCertificate(long index) {
+        giftTagMappingRepository.deleteCertificate(index);
+        giftCertificateRepository.delete(index);
+    }
+
+    private List<BigInteger> findUpdatedCertificateTagsId(GiftCertificate certificate) {
+        Set<String> tagNames = certificate.getTags().stream().map(t -> t.getName()).collect(Collectors.toSet());
+        List<BigInteger> tagsId = new ArrayList<>();
+        for(String tagName: tagNames) {
+            Optional<Tag> tagToFind = tagRepository.readByName(tagName);
+            if(tagToFind.isPresent()) {
+                tagsId.add(BigInteger.valueOf(tagToFind.get().getId()));
+            }
         }
-        return wasDeleted;
+        return tagsId;
     }
 }
