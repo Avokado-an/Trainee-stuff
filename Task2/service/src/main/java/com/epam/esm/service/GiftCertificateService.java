@@ -1,9 +1,9 @@
 package com.epam.esm.service;
 
-import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.model.dto.CertificateFilterDto;
-import com.epam.esm.model.dto.CreateGiftCertificateDto;
-import com.epam.esm.model.dto.UpdateGiftCertificateDto;
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.dto.CertificateFilterDto;
+import com.epam.esm.entity.dto.CreateGiftCertificateDto;
+import com.epam.esm.entity.dto.UpdateGiftCertificateDto;
 
 import java.util.List;
 import java.util.Optional;

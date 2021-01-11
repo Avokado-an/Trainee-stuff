@@ -1,6 +1,6 @@
 package com.epam.esm.repository;
 
-import com.epam.esm.model.GiftCertificate;
+import com.epam.esm.entity.GiftCertificate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

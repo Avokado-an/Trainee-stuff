@@ -2,11 +2,11 @@ package com.epam.esm.controller;
 
 import com.epam.esm.error.ErrorCode;
 import com.epam.esm.error.ErrorHandler;
-import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.model.dto.CertificateFilterDto;
-import com.epam.esm.model.dto.CreateGiftCertificateDto;
-import com.epam.esm.model.dto.IdDto;
-import com.epam.esm.model.dto.UpdateGiftCertificateDto;
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.dto.CertificateFilterDto;
+import com.epam.esm.entity.dto.CreateGiftCertificateDto;
+import com.epam.esm.entity.dto.IdDto;
+import com.epam.esm.entity.dto.UpdateGiftCertificateDto;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

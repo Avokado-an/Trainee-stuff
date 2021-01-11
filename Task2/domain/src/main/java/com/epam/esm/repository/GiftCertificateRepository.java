@@ -1,8 +1,8 @@
 package com.epam.esm.repository;
 
-import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.model.Tag;
-import com.epam.esm.model.dto.CertificateFilterDto;
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.CertificateFilterDto;
 import com.epam.esm.repository.mapper.GiftCertificateMapper;
 import com.epam.esm.repository.type.SearchTypeQuery;
 import com.epam.esm.repository.type.SortTypeQuery;

@@ -1,6 +1,6 @@
 package com.epam.esm.repository;
 
-import com.epam.esm.model.Tag;
+import com.epam.esm.entity.Tag;
 import com.epam.esm.repository.mapper.TagMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;

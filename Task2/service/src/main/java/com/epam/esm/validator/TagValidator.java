@@ -1,7 +1,9 @@
 package com.epam.esm.validator;
 
-import com.epam.esm.model.Tag;
+import com.epam.esm.entity.Tag;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 @Component
 public class TagValidator {
@@ -14,7 +16,8 @@ public class TagValidator {
     }
 
     private boolean validateName(String tagName) {
+        boolean doesContainForbiddenCharacters = Arrays.stream(tagName.split("")).anyMatch(FORBIDDEN_CHARACTERS::contains);
         return tagName.length() > MIN_LENGTH && tagName.length() < MAX_LENGTH
-                && !tagName.contains(FORBIDDEN_CHARACTERS);
+                && !doesContainForbiddenCharacters;
     }
 }

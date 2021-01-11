@@ -20,4 +20,15 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
     compile group: 'org.modelmapper', name: 'modelmapper', version: '0.7.5'
     compile group: 'org.springframework', name: 'spring-core', version: '5.2.12.RELEASE'
+    testImplementation(platform('org.junit:junit-bom:5.7.0'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
+    testImplementation 'com.h2database:h2:1.4.197'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }

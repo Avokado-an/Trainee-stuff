@@ -1,7 +1,7 @@
 package com.epam.esm.repository;
 
-import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.model.Tag;
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

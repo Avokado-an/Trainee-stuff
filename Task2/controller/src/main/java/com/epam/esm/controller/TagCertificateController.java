@@ -2,9 +2,9 @@ package com.epam.esm.controller;
 
 import com.epam.esm.error.ErrorCode;
 import com.epam.esm.error.ErrorHandler;
-import com.epam.esm.model.Tag;
-import com.epam.esm.model.dto.CreateTagDto;
-import com.epam.esm.model.dto.IdDto;
+import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.CreateTagDto;
+import com.epam.esm.entity.dto.IdDto;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

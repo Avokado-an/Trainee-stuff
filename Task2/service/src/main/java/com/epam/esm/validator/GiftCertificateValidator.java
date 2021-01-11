@@ -1,6 +1,6 @@
 package com.epam.esm.validator;
 
-import com.epam.esm.model.GiftCertificate;
+import com.epam.esm.entity.GiftCertificate;
 import org.springframework.stereotype.Component;
 
 @Component

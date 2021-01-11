@@ -1,6 +1,6 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.model.Tag;
+import com.epam.esm.entity.Tag;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.repository.TransactionManager;
 import com.epam.esm.service.TagService;
@@ -40,9 +40,9 @@ public class TagServiceImplementation implements TagService {
     @Override
     public Optional<Tag> create(String tagName) {
         Tag tag = new Tag();
+        tag.setName(tagName);
         Optional<Tag> createdTag = Optional.empty();
         if (tagValidator.validateTag(tag)) {
-            tag.setName(tagName);
             createdTag = Optional.of(tagRepository.create(tag));
         }
         return createdTag;
