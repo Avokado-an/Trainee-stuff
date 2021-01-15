@@ -10,7 +10,7 @@ public class GiftCertificateValidator {
     private static final int MAX_DESCRIPTION_LENGTH = 1000;
     private static final int MAX_PRICE = 100000;
     private static final int ZERO = 0;
-    private static final int MAX_DURATION = 10000;
+    private static final int MAX_DURATION = 1000;
     private static final int MAX_TAG_AMOUNT = 1000;
 
     public boolean validateCertificate(GiftCertificate certificate) {
@@ -19,24 +19,46 @@ public class GiftCertificateValidator {
                 && validateTagAmount(certificate.getTags().size());
     }
 
-    private boolean validateName(String name) {
+    public boolean validateName(String name) {
         return name.length() > ZERO && name.length() < MAX_NAME_LENGTH && !name.contains(FORBIDDEN_CHARACTERS);
     }
 
-    private boolean validateDescription(String description) {
+    public boolean validateDescription(String description) {
         return description.length() > ZERO && description.length() < MAX_DESCRIPTION_LENGTH
                 && !description.contains(FORBIDDEN_CHARACTERS);
     }
 
-    private boolean validatePrice(long price) {
+    public boolean validatePrice(long price) {
         return price > ZERO && price < MAX_PRICE;
     }
 
-    private boolean validateDuration(int duration) {
+    public boolean validateDuration(int duration) {
         return duration > ZERO && duration < MAX_DURATION;
     }
 
-    private boolean validateTagAmount(int tagsAmount) {
+    public boolean validatePrice(String price) {
+        boolean isValidValue = false;
+        try {
+            long priceValue = Long.parseLong(price);
+            isValidValue = priceValue > ZERO && priceValue < MAX_PRICE;
+        } catch (NumberFormatException ignored) {
+
+        }
+        return isValidValue;
+    }
+
+    public boolean validateDuration(String duration) {
+        boolean isValidValue = false;
+        try {
+            long durationValue = Long.parseLong(duration);
+            isValidValue = durationValue > ZERO && durationValue < MAX_DURATION;
+        } catch (NumberFormatException ignored) {
+
+        }
+        return isValidValue;
+    }
+
+    public boolean validateTagAmount(int tagsAmount) {
         return tagsAmount < MAX_TAG_AMOUNT;
     }
 }

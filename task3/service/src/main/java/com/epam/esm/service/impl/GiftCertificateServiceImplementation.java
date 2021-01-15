@@ -1,16 +1,17 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.repository.type.SortType;
-import com.epam.esm.service.specification.GiftCertificateSpecification;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.dto.CertificateFilterDto;
 import com.epam.esm.entity.dto.CreateGiftCertificateDto;
 import com.epam.esm.entity.dto.UpdateGiftCertificateDto;
+import com.epam.esm.entity.dto.UpdateGiftCertificateFieldDto;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.repository.type.SearchType;
+import com.epam.esm.repository.type.SortType;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.specification.GiftCertificateSpecification;
 import com.epam.esm.validator.GiftCertificateValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,18 +110,68 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
         return new HashSet<>(giftCertificateRepository.findAll());
     }
 
+    @Override//todo get rid of this ugly switch smh
+    public Optional<GiftCertificate> updateField(UpdateGiftCertificateFieldDto updatedField) {
+        Optional<GiftCertificate> certificate = giftCertificateRepository.findById(updatedField.getCertificateId());
+        boolean wasUpdatedValueValid = false;
+        if (certificate.isPresent()) {
+            switch (updatedField.getField()) {
+                case NAME:
+                    if (giftCertificateValidator.validateName(updatedField.getEditedValue())) {
+                        wasUpdatedValueValid = true;
+                        certificate.get().setName(updatedField.getEditedValue());
+                    }
+                    break;
+                case PRICE:
+                    if (giftCertificateValidator.validatePrice(updatedField.getEditedValue())) {
+                        wasUpdatedValueValid = true;
+                        certificate.get().setPrice(Long.parseLong(updatedField.getEditedValue()));
+                    }
+                    break;
+                case DESCRIPTION:
+                    if (giftCertificateValidator.validateDescription(updatedField.getEditedValue())) {
+                        wasUpdatedValueValid = true;
+                        certificate.get().setDescription(updatedField.getEditedValue());
+                    }
+                    break;
+                case DURATION:
+                    if (giftCertificateValidator.validateDuration(updatedField.getEditedValue())) {
+                        wasUpdatedValueValid = true;
+                        certificate.get().setDuration(Integer.parseInt(updatedField.getEditedValue()));
+                    }
+                    break;
+            }
+            if (wasUpdatedValueValid) {
+                certificate.get().setLastUpdateDate(LocalDateTime.now());
+                giftCertificateRepository.save(certificate.get());
+            }
+        }
+        return certificate;
+    }
+
     @Override
     public List<GiftCertificate> filter(CertificateFilterDto filter) {
         List<GiftCertificate> filteredCertificates;
         Optional<Specification<GiftCertificate>> currentSpecification = defineSpecification(
                 filter.getSearchTypes(), filter.getTagName(), filter.getCertificateNameOrDescription());
         Sort sortType = defineSortType(filter.getSortTypes());
-        if(currentSpecification.isPresent()) {
+        if (currentSpecification.isPresent()) {
             filteredCertificates = giftCertificateRepository.findAll(currentSpecification.get(), sortType);
         } else {
             filteredCertificates = giftCertificateRepository.findAll(sortType);
         }
         return filteredCertificates;
+    }
+
+    @Override
+    public List<GiftCertificate> findIdsCertificates(List<Long> certificatesId) {
+        List<GiftCertificate> certificates = new ArrayList<>();
+        Optional<GiftCertificate> certificate;
+        for (Long id : certificatesId) {
+            certificate = giftCertificateRepository.findById(id);
+            certificate.ifPresent(certificates::add);
+        }
+        return certificates;
     }
 
     private Optional<Specification<GiftCertificate>> defineSpecification(List<SearchType> searchTypes, String tagName, String name) {
@@ -142,9 +193,9 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
 
     private Sort defineSortType(List<SortType> sortTypes) {
         Sort sortAlgorithm;
-        if(!sortTypes.isEmpty()) {
+        if (!sortTypes.isEmpty()) {
             sortAlgorithm = sortTypes.get(0).getSort();
-            for(int i = 1; i < sortTypes.size(); i++) {
+            for (int i = 1; i < sortTypes.size(); i++) {
                 sortAlgorithm = sortAlgorithm.and(sortTypes.get(i).getSort());
             }
         } else {
@@ -161,7 +212,7 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
                 tagRepository.save(tag);
             }
         }
-        for(Tag tag: requiredTags) {
+        for (Tag tag : requiredTags) {
             certificateTags.add(tagRepository.findByName(tag.getName()));
         }
         return certificateTags;

@@ -1,5 +1,6 @@
 package com.epam.esm.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +30,11 @@ public class GiftCertificate {
             inverseJoinColumns = {@JoinColumn(name = "Utag_id")}
     )
     private Set<Tag> tags;
+
+    @ManyToMany(mappedBy = "certificates")
+    @JsonIgnore
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Set<CertificateOrder> certificateOrders;
 
     private String name;
     private String description;

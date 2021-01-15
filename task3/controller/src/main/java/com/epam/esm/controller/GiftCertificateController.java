@@ -1,13 +1,12 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.dto.CertificateFilterDto;
-import com.epam.esm.entity.dto.CreateGiftCertificateDto;
-import com.epam.esm.entity.dto.IdDto;
-import com.epam.esm.entity.dto.UpdateGiftCertificateDto;
+import com.epam.esm.entity.User;
+import com.epam.esm.entity.dto.*;
 import com.epam.esm.error.ErrorCode;
 import com.epam.esm.error.ErrorHandler;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +19,16 @@ import java.util.Set;
 @RequestMapping("certificates")
 public class GiftCertificateController {
     private GiftCertificateService giftCertificateService;
+    private UserService userService;
 
     @Autowired
     public void setGiftCertificateService(GiftCertificateService giftCertificateService) {
         this.giftCertificateService = giftCertificateService;
+    }
+
+    @Autowired
+    public void setOrderService(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping()
@@ -42,8 +47,8 @@ public class GiftCertificateController {
     }
 
     @PutMapping
-    public Optional<GiftCertificate> updateCertificate(@RequestBody UpdateGiftCertificateDto updatedMessage) {
-        return giftCertificateService.update(updatedMessage);
+    public Optional<GiftCertificate> updateCertificate(@RequestBody UpdateGiftCertificateDto updatedCertificate) {
+        return giftCertificateService.update(updatedCertificate);
     }
 
     @PostMapping
@@ -54,6 +59,16 @@ public class GiftCertificateController {
     @PostMapping("/filter")
     public List<GiftCertificate> filterCertificates(@RequestBody CertificateFilterDto filterDto) {
         return giftCertificateService.filter(filterDto);
+    }
+
+    @PutMapping("/edit")
+    public Optional<GiftCertificate> updateCertificateField(@RequestBody UpdateGiftCertificateFieldDto updatedField) {
+        return giftCertificateService.updateField(updatedField);
+    }
+
+    @PostMapping("/order")
+    public Optional<User> orderCertificate(@RequestBody CreateOrderDto newOrder) {
+        return userService.makeOrder(newOrder);
     }
 
     @ExceptionHandler

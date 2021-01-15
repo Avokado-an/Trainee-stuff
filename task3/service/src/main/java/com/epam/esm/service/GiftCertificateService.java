@@ -4,6 +4,7 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.dto.CertificateFilterDto;
 import com.epam.esm.entity.dto.CreateGiftCertificateDto;
 import com.epam.esm.entity.dto.UpdateGiftCertificateDto;
+import com.epam.esm.entity.dto.UpdateGiftCertificateFieldDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,4 +22,8 @@ public interface GiftCertificateService {
     Set<GiftCertificate> delete(long id);
 
     List<GiftCertificate> filter(CertificateFilterDto filterDto);
+
+    Optional<GiftCertificate> updateField(UpdateGiftCertificateFieldDto updatedField);
+
+    List<GiftCertificate> findIdsCertificates(List<Long> certificatesId);
 }
