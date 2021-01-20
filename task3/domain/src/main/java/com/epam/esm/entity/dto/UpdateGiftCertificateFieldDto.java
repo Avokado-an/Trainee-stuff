@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class UpdateGiftCertificateFieldDto {
-    private long certificateId;
+    private Long certificateId;
     private CertificateFieldsType field;
     private String editedValue;
 }

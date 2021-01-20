@@ -20,7 +20,7 @@ import java.util.Set;
 public class GiftCertificate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -38,8 +38,8 @@ public class GiftCertificate {
 
     private String name;
     private String description;
-    private long price;
-    private int duration;
+    private Long price;
+    private Integer duration;
     private LocalDateTime creationDate;
     private LocalDateTime lastUpdateDate;
 }

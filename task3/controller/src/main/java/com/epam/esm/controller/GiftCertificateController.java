@@ -27,7 +27,7 @@ public class GiftCertificateController {
     }
 
     @Autowired
-    public void setOrderService(UserService userService) {
+    public void setUserService(UserService userService) {
         this.userService = userService;
     }
 

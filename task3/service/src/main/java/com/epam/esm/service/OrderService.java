@@ -13,6 +13,8 @@ public interface OrderService {
 
     Optional<CertificateOrder> findUserOrderById(String userId, String orderId);
 
+    List<CertificateOrder> findMostExpensiveUserOrder(String userId);
+
     Optional<CertificateOrder> create(CreateOrderDto newOrder);
 
     long calculateTotalPrice(List<Long> certificatesId);

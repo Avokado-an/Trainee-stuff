@@ -7,10 +7,10 @@ import java.util.Set;
 
 @Data
 public class UpdateGiftCertificateDto {
-    private long id;
+    private Long id;
     private Set<Tag> tags;
-    private int duration;
-    private long price;
+    private Integer duration;
+    private Long price;
     private String description;
     private String name;
 }

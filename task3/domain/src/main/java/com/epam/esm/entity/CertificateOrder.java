@@ -18,7 +18,7 @@ import java.util.List;
 public class CertificateOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JsonIgnore
@@ -35,5 +35,5 @@ public class CertificateOrder {
     private List<GiftCertificate> certificates;
 
     private LocalDateTime creationTime;
-    private long totalPrice;
+    private Long totalPrice;
 }

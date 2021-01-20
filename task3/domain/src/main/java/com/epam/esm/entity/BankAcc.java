@@ -14,12 +14,12 @@ import javax.persistence.*;
 public class BankAcc {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    private long moneyAmount;
+    private Long moneyAmount;
 }

@@ -103,7 +103,7 @@ public class UserServiceImplementation implements UserService {
 
     private BankAcc createUserBankAcc(User user) {
         BankAcc bankAcc = new BankAcc();
-        bankAcc.setMoneyAmount(0);
+        bankAcc.setMoneyAmount(0L);
         bankAcc.setUser(user);
         return bankAccRepository.save(bankAcc);
     }

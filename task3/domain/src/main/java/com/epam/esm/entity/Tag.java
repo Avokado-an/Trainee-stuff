@@ -17,7 +17,7 @@ import java.util.Set;
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @ManyToMany(mappedBy = "tags")
     @JsonIgnore

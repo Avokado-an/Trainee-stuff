@@ -94,6 +94,18 @@ public class OrderServiceImplementation implements OrderService {
         return order;
     }
 
+    @Override
+    public List<CertificateOrder> findMostExpensiveUserOrder(String userId) {
+        List<CertificateOrder> mostExpensiveOrder;
+        try {
+            long userIdValue = Long.parseLong(userId);
+            mostExpensiveOrder = orderRepository.findMostExpensiveUserOrder(userIdValue);
+        } catch (NumberFormatException e) {
+            mostExpensiveOrder = new ArrayList<>();
+        }
+        return mostExpensiveOrder;
+    }
+
     private List<GiftCertificate> createCertificatesFromId(List<Long> ids) {
         return ids.stream().map(i -> GiftCertificate.builder().id(i).build()).collect(Collectors.toList());
     }

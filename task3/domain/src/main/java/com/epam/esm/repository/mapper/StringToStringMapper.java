@@ -1,4 +1,10 @@
 package com.epam.esm.repository.mapper;
 
-public class StringToStringMapper {
+import java.util.function.Function;
+
+public class StringToStringMapper implements Function<String, String> {
+    @Override
+    public String apply(String s) {
+        return s;
+    }
 }

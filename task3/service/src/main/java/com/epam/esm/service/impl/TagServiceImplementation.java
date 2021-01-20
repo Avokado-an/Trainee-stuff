@@ -1,6 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.MostPopularTagDto;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.TagService;
 import com.epam.esm.validator.TagValidator;
@@ -8,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class TagServiceImplementation implements TagService {
@@ -41,6 +40,18 @@ public class TagServiceImplementation implements TagService {
             createdTag = Optional.of(tagRepository.save(tag));
         }
         return createdTag;
+    }
+
+    @Override
+    public List<Tag> findMostUsedUserTag(String userId) {
+        List<Tag> tags;
+        try {
+            long userIdValue = Long.parseLong(userId);
+            tags = tagRepository.findMostUsedUserTag(userIdValue);
+        } catch (NumberFormatException e) {
+            tags = new ArrayList<>();
+        }
+        return tags;
     }
 
     @Override

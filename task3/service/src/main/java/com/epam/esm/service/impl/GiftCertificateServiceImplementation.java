@@ -110,7 +110,7 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
         return new HashSet<>(giftCertificateRepository.findAll());
     }
 
-    @Override//todo get rid of this ugly switch smh
+    /*@Override
     public Optional<GiftCertificate> updateField(UpdateGiftCertificateFieldDto updatedField) {
         Optional<GiftCertificate> certificate = giftCertificateRepository.findById(updatedField.getCertificateId());
         boolean wasUpdatedValueValid = false;
@@ -147,13 +147,28 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
             }
         }
         return certificate;
+    }*/
+
+    @Override
+    public Optional<GiftCertificate> updateField(UpdateGiftCertificateFieldDto updatedField) {
+        Optional<GiftCertificate> certificate = giftCertificateRepository.findById(updatedField.getCertificateId());
+        if (certificate.isPresent()) {
+            boolean wasUpdated = updateField(updatedField, certificate.get());
+            if (wasUpdated) {
+                certificate.get().setLastUpdateDate(LocalDateTime.now());
+                giftCertificateRepository.save(certificate.get());
+            } else {
+                certificate = Optional.empty();
+            }
+        }
+        return certificate;
     }
 
     @Override
     public List<GiftCertificate> filter(CertificateFilterDto filter) {
         List<GiftCertificate> filteredCertificates;
         Optional<Specification<GiftCertificate>> currentSpecification = defineSpecification(
-                filter.getSearchTypes(), filter.getTagName(), filter.getCertificateNameOrDescription());
+                filter.getSearchTypes(), filter.getTagNames(), filter.getCertificateNameOrDescription());
         Sort sortType = defineSortType(filter.getSortTypes());
         if (currentSpecification.isPresent()) {
             filteredCertificates = giftCertificateRepository.findAll(currentSpecification.get(), sortType);
@@ -174,21 +189,57 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
         return certificates;
     }
 
-    private Optional<Specification<GiftCertificate>> defineSpecification(List<SearchType> searchTypes, String tagName, String name) {
+    private boolean updateField(UpdateGiftCertificateFieldDto updatedField, GiftCertificate certificate) {
+        boolean wasUpdated = true;
+        try {
+            updatedField.getField()
+                    .getFieldEditor()
+                    .edit(updatedField
+                                    .getField()
+                                    .getValueMapper()
+                                    .apply(updatedField.getEditedValue()),
+                            certificate);
+            wasUpdated = giftCertificateValidator.validateCertificate(certificate);
+        } catch (NumberFormatException e) {
+            wasUpdated = false;
+        }
+        return wasUpdated;
+    }
+
+    private Optional<Specification<GiftCertificate>> defineSpecification(
+            List<SearchType> searchTypes, List<String> tagNames, String name) { //todo split this method into parts
         Optional<Specification<GiftCertificate>> currentSpecification = Optional.empty();
+        Optional<Specification<GiftCertificate>> tagSpecification;
         if (searchTypes.contains(SearchType.SEARCH_BY_NAME_OR_DESCRIPTION_BEGINNING)
                 && searchTypes.contains(SearchType.SEARCH_BY_TAG)) {
-            currentSpecification = Optional.of(Specification.where(GiftCertificateSpecification
-                    .filterCertificatesByTag(tagName)).and(Specification.where(GiftCertificateSpecification
-                    .filterCertificatesByNameDescriptionStart(name))));
+            tagSpecification = defineTagSpecification(tagNames);
+            if (tagSpecification.isPresent()) {
+                currentSpecification = Optional.of(tagSpecification.get().and(Specification.
+                        where(GiftCertificateSpecification.filterCertificatesByNameDescriptionStart(name))));
+            } else {
+                currentSpecification = Optional.of(Specification.where(GiftCertificateSpecification
+                        .filterCertificatesByNameDescriptionStart(name)));
+            }
         } else if (searchTypes.contains(SearchType.SEARCH_BY_NAME_OR_DESCRIPTION_BEGINNING)) {
             currentSpecification = Optional.of(Specification.where(GiftCertificateSpecification
                     .filterCertificatesByNameDescriptionStart(name)));
         } else if (searchTypes.contains(SearchType.SEARCH_BY_TAG)) {
-            currentSpecification = Optional.of(Specification.where(GiftCertificateSpecification
-                    .filterCertificatesByTag(tagName)));
+            currentSpecification = defineTagSpecification(tagNames);
         }
         return currentSpecification;
+    }
+
+    private Optional<Specification<GiftCertificate>> defineTagSpecification(List<String> tagNames) {
+        Optional<Specification<GiftCertificate>> tagSpecification = Optional.empty();
+        if (!tagNames.isEmpty()) {
+            tagSpecification = Optional.of(Specification
+                    .where(GiftCertificateSpecification.filterCertificatesByTag(tagNames.get(0))));
+            for (int i = 1; i < tagNames.size(); i++) {
+                tagSpecification = Optional.of(tagSpecification.get().and(Specification
+                        .where(GiftCertificateSpecification.filterCertificatesByTag(tagNames.get(i)))));
+            }
+        }
+        return tagSpecification;
     }
 
     private Sort defineSortType(List<SortType> sortTypes) {
