@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.epam.esm.service.GiftCertificateServiceTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2021-01-16T11:17:46" hostname="DESKTOP-JPP56SO" time="0.721">
+  <properties/>
+  <testcase name="readCertificateByIdInvalidTest()" classname="com.epam.esm.service.GiftCertificateServiceTest" time="0.563"/>
+  <testcase name="createCertificateValidTest()" classname="com.epam.esm.service.GiftCertificateServiceTest" time="0.068"/>
+  <testcase name="readCertificateByIdValidTest()" classname="com.epam.esm.service.GiftCertificateServiceTest" time="0.003"/>
+  <testcase name="createCertificateInvalidTest(CreateGiftCertificateDto)[1]" classname="com.epam.esm.service.GiftCertificateServiceTest" time="0.018"/>
+  <testcase name="createCertificateInvalidTest(CreateGiftCertificateDto)[2]" classname="com.epam.esm.service.GiftCertificateServiceTest" time="0.002"/>
+  <testcase name="createCertificateInvalidTest(CreateGiftCertificateDto)[3]" classname="com.epam.esm.service.GiftCertificateServiceTest" time="0.002"/>
+  <testcase name="createCertificateInvalidTest(CreateGiftCertificateDto)[4]" classname="com.epam.esm.service.GiftCertificateServiceTest" time="0.002"/>
+  <testcase name="createCertificateInvalidTest(CreateGiftCertificateDto)[5]" classname="com.epam.esm.service.GiftCertificateServiceTest" time="0.003"/>
+  <testcase name="createCertificateInvalidTest(CreateGiftCertificateDto)[6]" classname="com.epam.esm.service.GiftCertificateServiceTest" time="0.003"/>
+  <testcase name="createCertificateInvalidTest(CreateGiftCertificateDto)[7]" classname="com.epam.esm.service.GiftCertificateServiceTest" time="0.005"/>
+  <testcase name="readCertificateValidTest()" classname="com.epam.esm.service.GiftCertificateServiceTest" time="0.002"/>
+  <testcase name="deleteCertificateValidTest()" classname="com.epam.esm.service.GiftCertificateServiceTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
