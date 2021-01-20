@@ -1,12 +1,12 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.error.ErrorCode;
-import com.epam.esm.error.ErrorHandler;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.dto.CertificateFilterDto;
 import com.epam.esm.entity.dto.CreateGiftCertificateDto;
 import com.epam.esm.entity.dto.IdDto;
 import com.epam.esm.entity.dto.UpdateGiftCertificateDto;
+import com.epam.esm.error.ErrorCode;
+import com.epam.esm.error.ErrorHandler;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,8 +33,8 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/{id}")
-    public GiftCertificate showCertificates(@PathVariable String id) {
-        return giftCertificateService.findById(id).get();
+    public Optional<GiftCertificate> showCertificates(@PathVariable String id) {
+        return giftCertificateService.findById(id);
     }
 
     @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -43,8 +43,8 @@ public class GiftCertificateController {
     }
 
     @PutMapping
-    public GiftCertificate updateCertificate(@RequestBody UpdateGiftCertificateDto updatedMessage) {
-        return giftCertificateService.update(updatedMessage).get();
+    public Optional<GiftCertificate> updateCertificate(@RequestBody UpdateGiftCertificateDto updatedMessage) {
+        return giftCertificateService.update(updatedMessage);
     }
 
     @PostMapping
@@ -60,6 +60,6 @@ public class GiftCertificateController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorHandler handleIncorrectParameterValueException(Exception exception) {
-        return new ErrorHandler(exception.getMessage(), ErrorCode.RESOURCE_NOT_FOUND);
+        return new ErrorHandler(exception.getMessage(), ErrorCode.RESOURCE_NOT_FOUND.getErrorCode());
     }
 }

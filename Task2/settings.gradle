@@ -1,5 +1,6 @@
-rootProject.name = 'Task2'
-include 'domain'
-include 'service'
+rootProject.name = 'task2'
 include 'controller'
+include 'service'
+include 'вщьфшт'
+include 'domain'
 

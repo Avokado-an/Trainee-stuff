@@ -83,7 +83,7 @@ public class GiftCertificateServiceTest {
                 )},
                 {new CreateGiftCertificateDto(new HashSet<>(), "qwer", "des", 40000000L, 5)},
                 {new CreateGiftCertificateDto(new HashSet<>(), "<@@>>>>", "des", 4L, 50000000)},
-                {new CreateGiftCertificateDto(new HashSet<>(), "qwer", "des", -1, 5)},
+                {new CreateGiftCertificateDto(new HashSet<>(), "qwer", "des", -1L, 5)},
                 {new CreateGiftCertificateDto(new HashSet<>(), "<@@>>>>", "des", 4L, -1)},
                 {new CreateGiftCertificateDto(new HashSet<>(), "", "des", 4L, 1)},
                 {new CreateGiftCertificateDto(new HashSet<>(), "qqqq", "", 4L, -1)},
