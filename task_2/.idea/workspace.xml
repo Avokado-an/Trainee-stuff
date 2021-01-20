@@ -1,24 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdcea943-66b7-478b-9c0a-a3273464a2b3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../task3/controller/src/main/java/com/epam/esm/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/controller/src/main/java/com/epam/esm/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/BankAcc.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/BankAcc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/CertificateOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/CertificateOrder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/GiftCertificate.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/GiftCertificate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/Tag.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/dto/CertificateFilterDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/dto/CertificateFilterDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/dto/CreateGiftCertificateDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/dto/CreateGiftCertificateDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/dto/CreateOrderDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/dto/CreateOrderDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/dto/UpdateGiftCertificateDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/dto/UpdateGiftCertificateDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/dto/UpdateGiftCertificateFieldDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/entity/dto/UpdateGiftCertificateFieldDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/repository/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/repository/OrderRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/repository/TagRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/domain/src/main/java/com/epam/esm/repository/TagRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/service/src/main/java/com/epam/esm/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/service/src/main/java/com/epam/esm/service/OrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/service/src/main/java/com/epam/esm/service/TagService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/service/src/main/java/com/epam/esm/service/TagService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task3/service/src/main/java/com/epam/esm/service/impl/GiftCertificateServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task3/service/src/main/java/com/epam/esm/service/impl/GiftCertificateServiceImplementation.java" afterDir="false" />
-    </list>
+    <list default="true" id="c3a30f71-19b2-4032-80e9-6d93c5184293" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,6 +11,20 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view />
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -56,22 +53,23 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../task3" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../Trainee/task_2" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="configurable.group.other" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Mi\IdeaProjects\Trainee\task_2\domain\src\test\resources" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Mi\IdeaProjects\Trainee\task_2\service\src\test\java\com\epam\esm" />
       <recent name="C:\Users\Mi\IdeaProjects\Trainee\task_2\service\src\main\java\com\epam\esm" />
       <recent name="C:\Users\Mi\IdeaProjects\Trainee\task_2\domain\src\test\java\com\epam\esm\repository" />
       <recent name="C:\Users\Mi\IdeaProjects\Trainee\task_2\domain\src\main\resources" />
       <recent name="C:\Users\Mi\IdeaProjects\Trainee\task_2\domain\src\main\java" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Mi\IdeaProjects\clone\task_2\task_2\domain\src\main\resources" />
+      <recent name="C:\Users\Mi\IdeaProjects\Trainee\task_2\domain\src\test\resources" />
     </key>
   </component>
   <component name="RunManager" selected="Tomcat Server.Tomcat 8.5.51">
@@ -127,6 +125,25 @@
         <option name="taskNames">
           <list>
             <option value="dependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="task_2 [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="jar" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -232,10 +249,12 @@
       <item itemvalue="Gradle.Tests in 'task_2.domain.test'" />
       <item itemvalue="Gradle.Tests in 'task_2.service.test'" />
       <item itemvalue="Tomcat Server.Tomcat 8.5.51" />
+      <item itemvalue="Gradle.task_2 [jar]" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.task_2 [war]" />
+        <item itemvalue="Gradle.task_2 [jar]" />
         <item itemvalue="Gradle.Tests in 'task_2.domain.test'" />
         <item itemvalue="Gradle.Tests in 'task_2.service.test'" />
         <item itemvalue="Gradle.task_2 [dependencies]" />
@@ -255,7 +274,7 @@
               <path>
                 <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
                 <item name="Tomcat Server" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="Finished" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+                <item name="Running" type="7427dc5b:ServiceModel$ServiceGroupNode" />
               </path>
             </expand>
             <select />
@@ -288,10 +307,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="361" y="72" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1610795189006" />
-    <state x="447" y="68" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1610796021248">
+    <state x="176" y="74" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1611140175462">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="447" y="68" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1610796021248" />
+    <state x="176" y="74" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1611140175462" />
     <state x="574" y="129" key="#com.intellij.ide.util.MemberChooser" timestamp="1611005963587">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -300,58 +319,58 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="590" y="339" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.1536.824@0.0.1536.824" timestamp="1610795450333" />
-    <state x="549" y="168" key="FileChooserDialogImpl" timestamp="1611062902380">
+    <state x="549" y="168" key="FileChooserDialogImpl" timestamp="1611141474651">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="168" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1611062902380" />
-    <state width="1024" height="210" key="GridCell.Tab.0.bottom" timestamp="1611063043063">
+    <state x="549" y="168" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1611141474651" />
+    <state width="1024" height="210" key="GridCell.Tab.0.bottom" timestamp="1611141116617">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1024" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1611063043063" />
-    <state width="1024" height="210" key="GridCell.Tab.0.center" timestamp="1611063043063">
+    <state width="1024" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1611141116617" />
+    <state width="1024" height="210" key="GridCell.Tab.0.center" timestamp="1611141116617">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1024" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1611063043063" />
-    <state width="1024" height="210" key="GridCell.Tab.0.left" timestamp="1611063043063">
+    <state width="1024" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1611141116617" />
+    <state width="1024" height="210" key="GridCell.Tab.0.left" timestamp="1611141116617">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1024" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1611063043063" />
-    <state width="1024" height="210" key="GridCell.Tab.0.right" timestamp="1611063043063">
+    <state width="1024" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1611141116617" />
+    <state width="1024" height="210" key="GridCell.Tab.0.right" timestamp="1611141116617">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1024" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1611063043063" />
-    <state width="1024" height="210" key="GridCell.Tab.1.bottom" timestamp="1611063043063">
+    <state width="1024" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1611141116617" />
+    <state width="1024" height="210" key="GridCell.Tab.1.bottom" timestamp="1611141116515">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1024" height="210" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1611063043063" />
-    <state width="1024" height="210" key="GridCell.Tab.1.center" timestamp="1611063043063">
+    <state width="1024" height="210" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1611141116515" />
+    <state width="1024" height="210" key="GridCell.Tab.1.center" timestamp="1611141116515">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1024" height="210" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1611063043063" />
-    <state width="1024" height="210" key="GridCell.Tab.1.left" timestamp="1611063043063">
+    <state width="1024" height="210" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1611141116515" />
+    <state width="1024" height="210" key="GridCell.Tab.1.left" timestamp="1611141116515">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1024" height="210" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1611063043063" />
-    <state width="1024" height="210" key="GridCell.Tab.1.right" timestamp="1611063043063">
+    <state width="1024" height="210" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1611141116515" />
+    <state width="1024" height="210" key="GridCell.Tab.1.right" timestamp="1611141116515">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1024" height="210" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1611063043063" />
-    <state width="1024" height="210" key="GridCell.Tab.2.bottom" timestamp="1611063043063">
+    <state width="1024" height="210" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1611141116515" />
+    <state width="1024" height="210" key="GridCell.Tab.2.bottom" timestamp="1611141116516">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1024" height="210" key="GridCell.Tab.2.bottom/0.0.1536.824@0.0.1536.824" timestamp="1611063043063" />
-    <state width="1024" height="210" key="GridCell.Tab.2.center" timestamp="1611063043063">
+    <state width="1024" height="210" key="GridCell.Tab.2.bottom/0.0.1536.824@0.0.1536.824" timestamp="1611141116516" />
+    <state width="1024" height="210" key="GridCell.Tab.2.center" timestamp="1611141116515">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1024" height="210" key="GridCell.Tab.2.center/0.0.1536.824@0.0.1536.824" timestamp="1611063043063" />
-    <state width="1024" height="210" key="GridCell.Tab.2.left" timestamp="1611063043063">
+    <state width="1024" height="210" key="GridCell.Tab.2.center/0.0.1536.824@0.0.1536.824" timestamp="1611141116515" />
+    <state width="1024" height="210" key="GridCell.Tab.2.left" timestamp="1611141116515">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1024" height="210" key="GridCell.Tab.2.left/0.0.1536.824@0.0.1536.824" timestamp="1611063043063" />
-    <state width="1024" height="210" key="GridCell.Tab.2.right" timestamp="1611063043063">
+    <state width="1024" height="210" key="GridCell.Tab.2.left/0.0.1536.824@0.0.1536.824" timestamp="1611141116515" />
+    <state width="1024" height="210" key="GridCell.Tab.2.right" timestamp="1611141116515">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1024" height="210" key="GridCell.Tab.2.right/0.0.1536.824@0.0.1536.824" timestamp="1611063043063" />
+    <state width="1024" height="210" key="GridCell.Tab.2.right/0.0.1536.824@0.0.1536.824" timestamp="1611141116515" />
     <state x="465" y="238" key="com.intellij.ide.util.TipDialog" timestamp="1611062835095">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
