@@ -1,6 +1,0 @@
-rootProject.name = 'task_2'
-include 'controller'
-include 'service'
-include 'module'
-include 'domain'
-

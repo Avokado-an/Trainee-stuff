@@ -1,0 +1,6 @@
+rootProject.name = 'task2'
+include 'controller'
+include 'service'
+include 'вщьфшт'
+include 'domain'
+
