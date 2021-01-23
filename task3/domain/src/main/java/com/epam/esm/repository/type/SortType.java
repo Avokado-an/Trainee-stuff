@@ -1,5 +1,6 @@
 package com.epam.esm.repository.type;
 
+
 import org.springframework.data.domain.Sort;
 
 public enum SortType {

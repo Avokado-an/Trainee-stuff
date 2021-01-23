@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = "owner")
 @Builder
-public class CertificateOrder {
+public class CertificateOrder extends RepresentationModel<CertificateOrder> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

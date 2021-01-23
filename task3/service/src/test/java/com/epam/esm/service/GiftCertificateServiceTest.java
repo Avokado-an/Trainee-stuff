@@ -4,6 +4,7 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.dto.CreateGiftCertificateDto;
 import com.epam.esm.entity.dto.CreateTagDto;
+import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.service.impl.GiftCertificateServiceImplementation;
 import com.epam.esm.validator.GiftCertificateValidator;
 import org.junit.jupiter.api.AfterEach;

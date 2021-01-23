@@ -6,6 +6,8 @@ import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.TagService;
 import com.epam.esm.validator.TagValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +29,8 @@ public class TagServiceImplementation implements TagService {
     }
 
     @Override
-    public Set<Tag> viewAll() {
-        return new HashSet<>(tagRepository.findAll());
+    public Page<Tag> viewAll(Pageable pageable) {
+        return tagRepository.findAll(pageable);
     }
 
     @Override

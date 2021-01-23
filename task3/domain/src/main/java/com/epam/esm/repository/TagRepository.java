@@ -1,6 +1,8 @@
 package com.epam.esm.repository;
 
 import com.epam.esm.entity.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -24,6 +26,8 @@ public interface TagRepository extends JpaRepository<Tag, Long>, JpaSpecificatio
     List<Tag> findMostUsedUserTag(@Param("userId") Long userId);
 
     int removeAllById(long id);
+
+    Page<Tag> findAll(Pageable pageable);
 
     Tag findByName(String name);
 }

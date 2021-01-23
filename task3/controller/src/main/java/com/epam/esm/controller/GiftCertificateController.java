@@ -8,12 +8,20 @@ import com.epam.esm.error.ErrorHandler;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import static com.epam.esm.hateoas.HateoasCertificateManager.manageCertificatesLinks;
+import static com.epam.esm.hateoas.HateoasCertificateManager.manageSpecificCertificateLinks;
 
 @RestController
 @RequestMapping("certificates")
@@ -32,13 +40,18 @@ public class GiftCertificateController {
     }
 
     @GetMapping()
-    public Set<GiftCertificate> showCertificates() {
-        return giftCertificateService.findAll();
+    public Page<GiftCertificate> showCertificates(@PageableDefault(
+            sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<GiftCertificate> pageCertificates = giftCertificateService.findAll(pageable);
+        manageCertificatesLinks(pageCertificates);
+        return pageCertificates;
     }
 
     @GetMapping("/{id}")
-    public Optional<GiftCertificate> showCertificates(@PathVariable String id) {
-        return giftCertificateService.findById(id);
+    public ResponseEntity<Optional<GiftCertificate>> showCertificates(@PathVariable String id) {
+        Optional<GiftCertificate> certificate = giftCertificateService.findById(id);
+        manageSpecificCertificateLinks(certificate);
+        return new ResponseEntity<>(certificate, HttpStatus.OK);
     }
 
     @DeleteMapping

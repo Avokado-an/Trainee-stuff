@@ -9,6 +9,8 @@ import com.epam.esm.service.OrderService;
 import com.epam.esm.validator.OrderValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -67,14 +69,14 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    public List<CertificateOrder> findUserOrders(String userId) {
-        List<CertificateOrder> certificateOrders;
+    public Page<CertificateOrder> findUserOrders(String userId, Pageable pageable) {
+        Page<CertificateOrder> certificateOrders;
         try {
             long id = Long.parseLong(userId);
             User user = User.builder().id(id).build();
-            certificateOrders = orderRepository.findAllByOwner(user);
+            certificateOrders = orderRepository.findAllByOwner(user, pageable);
         } catch (NumberFormatException e) {
-            certificateOrders = new ArrayList<>();
+            certificateOrders = Page.empty();
         }
         return certificateOrders;
     }
@@ -86,8 +88,7 @@ public class OrderServiceImplementation implements OrderService {
             long userIdValue = Long.parseLong(userId);
             long orderIdValue = Long.parseLong(orderId);
             User user = User.builder().id(userIdValue).build();
-            List<CertificateOrder> userCertificateOrders = orderRepository.findAllByOwner(user);
-            order = userCertificateOrders.stream().filter(o -> Long.valueOf(o.getId()).equals(orderIdValue)).findAny();
+            order = orderRepository.findByIdAndOwner(orderIdValue, user);
         } catch (NumberFormatException e) {
             order = Optional.empty();
         }

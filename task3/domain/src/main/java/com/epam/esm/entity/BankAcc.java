@@ -2,6 +2,7 @@ package com.epam.esm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(exclude = "user")
 @Data
 @Entity
-public class BankAcc {
+public class BankAcc extends RepresentationModel<BankAcc> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

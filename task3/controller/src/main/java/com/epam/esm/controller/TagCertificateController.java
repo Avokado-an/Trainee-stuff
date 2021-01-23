@@ -7,11 +7,17 @@ import com.epam.esm.error.ErrorCode;
 import com.epam.esm.error.ErrorHandler;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 import java.util.Set;
+
+import static com.epam.esm.hateoas.HateoasTagManager.manageTagLinks;
 
 @RestController
 @RequestMapping("tags")
@@ -24,8 +30,10 @@ public class TagCertificateController {
     }
 
     @GetMapping
-    public Set<Tag> showTags() {
-        return tagService.viewAll();
+    public Page<Tag> showTags(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Tag> tags = tagService.viewAll(pageable);
+        manageTagLinks(tags, pageable);
+        return tags;
     }
 
     @DeleteMapping

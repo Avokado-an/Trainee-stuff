@@ -4,18 +4,24 @@ import com.epam.esm.entity.CertificateOrder;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.User;
 import com.epam.esm.entity.dto.CreateUserDto;
-import com.epam.esm.entity.dto.MostPopularTagDto;
 import com.epam.esm.error.ErrorCode;
 import com.epam.esm.error.ErrorHandler;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.epam.esm.hateoas.HateoasUserManager.*;
 
 @RestController
 @RequestMapping("/users")
@@ -40,8 +46,10 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> viewAllUsers() {
-        return userService.findAllUsers();
+    public Page<User> viewAllUsers(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<User> users = userService.findAllUsers(pageable);
+        manageAllUsersLinks(users, pageable);
+        return users;
     }
 
     @PostMapping
@@ -50,13 +58,18 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public Optional<User> viewUserById(@PathVariable String userId) {
-        return userService.findById(userId);
+    public ResponseEntity<Optional<User>> viewUserById(@PathVariable String userId) {
+        Optional<User> user = userService.findById(userId);
+        manageUserLinks(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/orders")
-    public List<CertificateOrder> viewUserOrders(@PathVariable String userId) {
-        return orderService.findUserOrders(userId);
+    public Page<CertificateOrder> viewUserOrders(@PathVariable String userId, @PageableDefault(
+            sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<CertificateOrder> orders = orderService.findUserOrders(userId, pageable);
+        manageUserOrdersLinks(orders, userId, pageable);
+        return orders;
     }
 
     @PostMapping("{userId}/orders/popular_tag")
@@ -70,8 +83,11 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/orders/{orderId}")
-    public Optional<CertificateOrder> viewUserOrderById(@PathVariable String userId, @PathVariable String orderId) {
-        return orderService.findUserOrderById(userId, orderId);
+    public ResponseEntity<Optional<CertificateOrder>> viewUserOrderById(
+            @PathVariable String userId, @PathVariable String orderId) {
+        Optional<CertificateOrder> order = orderService.findUserOrderById(userId, orderId);
+        manageUserOrderLinks(order, userId);
+        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     @ExceptionHandler

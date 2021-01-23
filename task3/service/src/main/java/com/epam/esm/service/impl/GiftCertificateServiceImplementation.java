@@ -15,6 +15,8 @@ import com.epam.esm.service.specification.GiftCertificateSpecification;
 import com.epam.esm.validator.GiftCertificateValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -81,8 +83,13 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
     }
 
     @Override
-    public Set<GiftCertificate> findAll() {
-        return new HashSet<>(giftCertificateRepository.findAll());
+    public Optional<GiftCertificate> findById(long id) {
+        return giftCertificateRepository.findById(id);
+    }
+
+    @Override
+    public Page<GiftCertificate> findAll(Pageable pageable) {
+        return giftCertificateRepository.findAll(pageable);
     }
 
     @Override

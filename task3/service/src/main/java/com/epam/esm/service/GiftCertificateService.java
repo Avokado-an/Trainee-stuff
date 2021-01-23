@@ -5,6 +5,8 @@ import com.epam.esm.entity.dto.CertificateFilterDto;
 import com.epam.esm.entity.dto.CreateGiftCertificateDto;
 import com.epam.esm.entity.dto.UpdateGiftCertificateDto;
 import com.epam.esm.entity.dto.UpdateGiftCertificateFieldDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +17,9 @@ public interface GiftCertificateService {
 
     Optional<GiftCertificate> findById(String id);
 
-    Set<GiftCertificate> findAll();
+    Optional<GiftCertificate> findById(long id);
+
+    Page<GiftCertificate> findAll(Pageable pageable);
 
     Optional<GiftCertificate> update(UpdateGiftCertificateDto newCertificate);
 
