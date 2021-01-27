@@ -1,7 +1,7 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.entity.CertificateOrder;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.User;
 import com.epam.esm.entity.dto.*;
 import com.epam.esm.error.ErrorCode;
 import com.epam.esm.error.ErrorHandler;
@@ -80,7 +80,7 @@ public class GiftCertificateController {
     }
 
     @PostMapping("/order")
-    public Optional<User> orderCertificate(@RequestBody CreateOrderDto newOrder) {
+    public Optional<CertificateOrder> orderCertificate(@RequestBody CreateOrderDto newOrder) {
         return userService.makeOrder(newOrder);
     }
 

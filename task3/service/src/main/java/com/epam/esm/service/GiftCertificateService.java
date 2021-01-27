@@ -17,8 +17,6 @@ public interface GiftCertificateService {
 
     Optional<GiftCertificate> findById(String id);
 
-    Optional<GiftCertificate> findById(long id);
-
     Page<GiftCertificate> findAll(Pageable pageable);
 
     Optional<GiftCertificate> update(UpdateGiftCertificateDto newCertificate);

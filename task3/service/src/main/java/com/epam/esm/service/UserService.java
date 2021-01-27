@@ -1,5 +1,6 @@
 package com.epam.esm.service;
 
+import com.epam.esm.entity.CertificateOrder;
 import com.epam.esm.entity.User;
 import com.epam.esm.entity.dto.CreateOrderDto;
 import com.epam.esm.entity.dto.CreateUserDto;
@@ -13,9 +14,7 @@ public interface UserService {
 
     Optional<User> createUser(CreateUserDto newUser);
 
-    Optional<User> makeOrder(CreateOrderDto order);
+    Optional<CertificateOrder> makeOrder(CreateOrderDto order);
 
     Optional<User> findById(String id);
-
-    Optional<User> findById(Long id);
 }

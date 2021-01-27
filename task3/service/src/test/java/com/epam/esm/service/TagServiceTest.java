@@ -1,100 +1,91 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.Tag;
+import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.impl.TagServiceImplementation;
 import com.epam.esm.validator.TagValidator;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
+@RunWith(SpringRunner.class)
 public class TagServiceTest {
-    private TagRepository tagRepository;
-    private TagServiceImplementation tagService;
-    private TransactionManager transactionManager;
+    @TestConfiguration
+    static class EmployeeServiceImplTestContextConfiguration {
+        @Bean
+        public TagService tagService() {
+            return new TagServiceImplementation();
+        }
 
-    @BeforeEach
-    public void setUp() {
-        tagRepository = mock(TagRepository.class);
-        transactionManager = mock(TransactionManager.class);
-        tagService = new TagServiceImplementation();
-        tagService.setTagValidator(new TagValidator());
-        tagService.setTransactionManager(transactionManager);
-        tagService.setTagRepository(tagRepository);
+        @Bean
+        public TagValidator tagValidator() {
+            return new TagValidator();
+        }
     }
 
-    @AfterEach
-    public void deactivate() {
-        tagRepository = null;
-        transactionManager = null;
-        tagService = null;
+    @Autowired
+    private TagService tagService;
+
+    @MockBean
+    private TagRepository tagRepository;
+
+    @Test
+    public void viewAllValidTest() {
+        when(tagRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
+        assertEquals(0, tagService.viewAll(Pageable.unpaged()).getNumberOfElements());
     }
 
     @Test
     public void createTagValidTest() {
-        String name = "qwer";
-        Tag tag = new Tag(name);
-        when(tagRepository.create(any(Tag.class))).thenReturn(tag);
-        Optional<Tag> actual = Optional.of(tag);
-        Optional<Tag> expected = tagService.create(tag.getName());
-        assertEquals(actual, expected);
-    }
-
-    public static Object[][] createTagIncorrectData() {
-        return new Object[][]{
-                {new Tag("qwer#<>#")},
-                {new Tag("qwerffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")},
-                {new Tag("")}
-        };
-    }
-
-    @ParameterizedTest
-    @MethodSource("createTagIncorrectData")
-    public void createCertificateInvalidTest(Tag tag) {
-        Optional<Tag> actual = Optional.empty();
-        Optional<Tag> expected = tagService.create(tag.getName());
-        assertEquals(actual, expected);
+        String tagName = "tag1";
+        when(tagRepository.save(any(Tag.class))).thenReturn(new Tag(tagName));
+        Optional<Tag> savedTag = tagService.create(tagName);
+        assertTrue(savedTag.isPresent());
     }
 
     @Test
-    public void readTagValidTest() {
-        int actualSize = 1;
-        Set<Tag> actualCertificates = new HashSet<>();
-        actualCertificates.add(new Tag("111111"));
-        when(tagService.viewAll()).thenReturn(actualCertificates);
-        Set<Tag> expectedCertificates = tagService.viewAll();
-        int expectedSize = expectedCertificates.size();
-        assertEquals(expectedSize, actualSize);
+    public void createTagInvalidTest() {
+        String tagName = "tag1$#$#$#$#";
+        when(tagRepository.save(any(Tag.class))).thenReturn(new Tag(tagName));
+        Optional<Tag> savedTag = tagService.create(tagName);
+        assertFalse(savedTag.isPresent());
     }
 
     @Test
-    public void deleteTagValidTest() {
-        Set<Tag> tags = new HashSet<>();
-        Tag tag = new Tag();
-        tag.setName("qwer");
-        tags.add(tag);
-        doNothing().when(transactionManager).deleteTag(any(Long.class));
-        when(tagRepository.read()).thenReturn(tags);
-        Set<Tag> expectedTags = tagService.delete(1L);
-        assertEquals(tags, expectedTags);
+    public void deleteValidTest() {
+        Set<Tag> tagSet = new HashSet<>();
+        Tag tag = new Tag("name");
+        tag.setId(1L);
+        tagSet.add(tag);
+        when(tagRepository.removeAllById(any(Long.class))).thenReturn(tagSet.remove(tag) ? 1 : 0);
+        assertTrue(tagSet.isEmpty());
+    }
+
+    @Test
+    public void findMostUsedUserTagValidTest() {
+        String userName = "1";
+        Tag tag = new Tag("most popular tag");
+        when(tagRepository.findMostUsedUserTag(any(Long.class))).thenReturn(new ArrayList<>(Collections.singleton(tag)));
+        List<Tag> mostPopularTag = tagService.findMostUsedUserTag(userName);
+        assertEquals(mostPopularTag.get(0), tag);
+    }
+
+    @Test
+    public void findMostUsedUserTagInvalidTest() {
+        String userName = "1asdfasfasdf";
+        List<Tag> mostPopularTag = tagService.findMostUsedUserTag(userName);
+        assertTrue(mostPopularTag.isEmpty());
     }
 }

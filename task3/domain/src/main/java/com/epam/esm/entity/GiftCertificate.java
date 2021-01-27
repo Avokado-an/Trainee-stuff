@@ -23,7 +23,7 @@ public class GiftCertificate extends RepresentationModel<GiftCertificate> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(
             name = "GiftCertificates_tags",

@@ -55,7 +55,7 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
         if (giftCertificateValidator.validateCertificate(certificate)) {
             certificate.setCreationDate(LocalDateTime.now());
             certificate.setLastUpdateDate(LocalDateTime.now());
-            List<Tag> existingTags = tagRepository.findAll();
+            /*List<Tag> existingTags = tagRepository.findAll();
             Set<Tag> requiredTags = certificate.getTags();
             Set<Tag> certificateTags = new HashSet<>();
             for (Tag tag : requiredTags) {
@@ -64,7 +64,7 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
                 }
                 certificateTags.add(tagRepository.findByName(tag.getName()));
             }
-            certificate.setTags(certificateTags);
+            certificate.setTags(certificateTags);*/
             createdCertificate = Optional.of(giftCertificateRepository.save(certificate));
         }
         return createdCertificate;
@@ -83,11 +83,6 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
     }
 
     @Override
-    public Optional<GiftCertificate> findById(long id) {
-        return giftCertificateRepository.findById(id);
-    }
-
-    @Override
     public Page<GiftCertificate> findAll(Pageable pageable) {
         return giftCertificateRepository.findAll(pageable);
     }
@@ -97,14 +92,10 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
     public Optional<GiftCertificate> update(UpdateGiftCertificateDto updatedCertificate) {
         Optional<GiftCertificate> certificate = giftCertificateRepository.findById(updatedCertificate.getId());
         if (certificate.isPresent() && giftCertificateValidator.validateCertificate(certificate.get())) {
+            certificate = Optional.of(modelMapper.map(updatedCertificate, GiftCertificate.class));
             certificate.get().setLastUpdateDate(LocalDateTime.now());
-            certificate.get().setDescription(updatedCertificate.getDescription());
-            certificate.get().setDuration(updatedCertificate.getDuration());
-            certificate.get().setName(updatedCertificate.getName());
-            certificate.get().setPrice(updatedCertificate.getPrice());
-            certificate.get().setLastUpdateDate(LocalDateTime.now());
-            Set<Tag> certificateTagsFromDb = updateCertificateTags(updatedCertificate.getTags());
-            certificate.get().setTags(certificateTagsFromDb);
+            //Set<Tag> certificateTagsFromDb = updateCertificateTags(updatedCertificate.getTags());
+            //certificate.get().setTags(certificateTagsFromDb);
             giftCertificateRepository.save(certificate.get());
         }
         return certificate;
@@ -116,45 +107,6 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
         giftCertificateRepository.removeAllById(id);
         return new HashSet<>(giftCertificateRepository.findAll());
     }
-
-    /*@Override
-    public Optional<GiftCertificate> updateField(UpdateGiftCertificateFieldDto updatedField) {
-        Optional<GiftCertificate> certificate = giftCertificateRepository.findById(updatedField.getCertificateId());
-        boolean wasUpdatedValueValid = false;
-        if (certificate.isPresent()) {
-            switch (updatedField.getField()) {
-                case NAME:
-                    if (giftCertificateValidator.validateName(updatedField.getEditedValue())) {
-                        wasUpdatedValueValid = true;
-                        certificate.get().setName(updatedField.getEditedValue());
-                    }
-                    break;
-                case PRICE:
-                    if (giftCertificateValidator.validatePrice(updatedField.getEditedValue())) {
-                        wasUpdatedValueValid = true;
-                        certificate.get().setPrice(Long.parseLong(updatedField.getEditedValue()));
-                    }
-                    break;
-                case DESCRIPTION:
-                    if (giftCertificateValidator.validateDescription(updatedField.getEditedValue())) {
-                        wasUpdatedValueValid = true;
-                        certificate.get().setDescription(updatedField.getEditedValue());
-                    }
-                    break;
-                case DURATION:
-                    if (giftCertificateValidator.validateDuration(updatedField.getEditedValue())) {
-                        wasUpdatedValueValid = true;
-                        certificate.get().setDuration(Integer.parseInt(updatedField.getEditedValue()));
-                    }
-                    break;
-            }
-            if (wasUpdatedValueValid) {
-                certificate.get().setLastUpdateDate(LocalDateTime.now());
-                giftCertificateRepository.save(certificate.get());
-            }
-        }
-        return certificate;
-    }*/
 
     @Override
     public Optional<GiftCertificate> updateField(UpdateGiftCertificateFieldDto updatedField) {
@@ -197,7 +149,7 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
     }
 
     private boolean updateField(UpdateGiftCertificateFieldDto updatedField, GiftCertificate certificate) {
-        boolean wasUpdated = true;
+        boolean wasUpdated;
         try {
             updatedField.getField()
                     .getFieldEditor()

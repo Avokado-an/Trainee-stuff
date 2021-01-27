@@ -1,48 +1,42 @@
 package com.epam.esm.validator;
 
 import com.epam.esm.entity.Tag;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.modelmapper.internal.util.Assert;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@RunWith(SpringJUnit4ClassRunner.class)
 public class TagValidatorTest {
-    private static TagValidator tagValidator;
-
-    @BeforeAll
-    public static void setUp() {
-        tagValidator = new TagValidator();
+    @TestConfiguration
+    static class CertificateValidatorTestContextConfiguration {
+        @Bean
+        public TagValidator tagValidator() {
+            return new TagValidator();
+        }
     }
+
+    @Autowired
+    private TagValidator tagValidator;
 
     @Test
     public void validateTagValidTest() {
+        String tagName = "tag1";
         Tag tag = new Tag();
-        tag.setName("qwer");
-        Assert.isTrue(tagValidator.validateTag(tag));
+        tag.setName(tagName);
+        Assert.assertTrue(tagValidator.validateTag(tag));
     }
 
-    public static Object[][] validateTagIncorrectData() {
-        return new Object[][]{
-                {new Tag("qwer#<>#")},
-                {new Tag("qwerffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
-                        "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")},
-                {new Tag("")}
-        };
-    }
-
-    @ParameterizedTest
-    @MethodSource("validateTagIncorrectData")
-    public void validateTagInvalidTest(Tag tag) {
-        Assert.isTrue(!tagValidator.validateTag(tag));
+    @Test
+    public void validateTagInvalidTest() {
+        String tagName = "tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1" +
+                "tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1" +
+                "tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1tag1";
+        Tag tag = new Tag();
+        tag.setName(tagName);
+        Assert.assertFalse(tagValidator.validateTag(tag));
     }
 }

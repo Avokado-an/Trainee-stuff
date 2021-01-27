@@ -73,13 +73,14 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     @Transactional
-    public Optional<User> makeOrder(CreateOrderDto order) {
+    public Optional<CertificateOrder> makeOrder(CreateOrderDto order) {
         Optional<User> user = userRepository.findById(order.getBuyerId());
+        Optional<CertificateOrder> createdOrder = Optional.empty();
         if (user.isPresent()) {
             long totalPrice = orderService.calculateTotalPrice(order.getOrderedCertificatesId());
             long userMoney = user.get().getMoneyAccount().getMoneyAmount();
             if (totalPrice <= userMoney) {
-                Optional<CertificateOrder> createdOrder = orderService.create(order);
+                createdOrder = orderService.create(order);
                 if (createdOrder.isPresent()) {
                     user.get().add(createdOrder.get());
                     user.get().getMoneyAccount().setMoneyAmount(userMoney - totalPrice);
@@ -87,7 +88,7 @@ public class UserServiceImplementation implements UserService {
                 }
             }
         }
-        return Optional.empty();
+        return createdOrder;
     }
 
     @Override
@@ -100,11 +101,6 @@ public class UserServiceImplementation implements UserService {
             searchedUser = Optional.empty();
         }
         return searchedUser;
-    }
-
-    @Override
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
     }
 
     private BankAcc createUserBankAcc(User user) {

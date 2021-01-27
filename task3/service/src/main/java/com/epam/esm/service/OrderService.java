@@ -11,8 +11,6 @@ import java.util.Optional;
 public interface OrderService {
     Page<CertificateOrder> findUserOrders(String userId, Pageable pageable);
 
-    List<CertificateOrder> findAllOrders();
-
     Optional<CertificateOrder> findUserOrderById(String userId, String orderId);
 
     List<CertificateOrder> findMostExpensiveUserOrder(String userId);

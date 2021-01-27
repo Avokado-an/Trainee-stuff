@@ -42,11 +42,6 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    public List<CertificateOrder> findAllOrders() {
-        return orderRepository.findAll();
-    }
-
-    @Override
     public Optional<CertificateOrder> create(CreateOrderDto newOrder) {
         Optional<CertificateOrder> createdOrder = Optional.empty();
         long totalPrice = calculateTotalPrice(newOrder.getOrderedCertificatesId());

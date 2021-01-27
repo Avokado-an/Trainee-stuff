@@ -28,7 +28,7 @@ public class User extends RepresentationModel<User> {
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     private BankAcc moneyAccount;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
