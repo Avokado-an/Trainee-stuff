@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface GiftCertificateRepository extends JpaRepository<GiftCertificate, Long>, JpaSpecificationExecutor<GiftCertificate> {
     Page<GiftCertificate> findAll(Pageable pageable);
-    Optional<GiftCertificate> findById(long id);
+
+    Optional<GiftCertificate> findById(Long id);
+
     int removeAllById(long id);
 }

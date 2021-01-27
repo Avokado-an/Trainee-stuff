@@ -10,6 +10,7 @@ import com.epam.esm.service.impl.OrderServiceImplementation;
 import com.epam.esm.validator.OrderValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -40,6 +41,11 @@ public class OrderServiceTest {
         public OrderValidator orderValidator() {
             return new OrderValidator();
         }
+
+        @Bean
+        public ModelMapper modelMapper() {
+            return new ModelMapper();
+        }
     }
 
     @Autowired
@@ -50,9 +56,6 @@ public class OrderServiceTest {
 
     @MockBean
     private GiftCertificateServiceImplementation certificateService;
-
-//List<GiftCertificate> certificates = Arrays.asList(GiftCertificate.builder().price(100L).build(),
-    //        GiftCertificate.builder().price(100L).build());
 
     @Test
     public void findMostExpensiveUserOrderValidTest() {

@@ -60,16 +60,7 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
         if (giftCertificateValidator.validateCertificate(certificate)) {
             certificate.setCreationDate(LocalDateTime.now());
             certificate.setLastUpdateDate(LocalDateTime.now());
-            List<Tag> existingTags = tagRepository.findAll();
-            Set<Tag> requiredTags = certificate.getTags();
-            Set<Tag> certificateTags = new HashSet<>();
-            for (Tag tag : requiredTags) {
-                if (!existingTags.contains(tag)) {
-                    tagRepository.save(tag);
-                }
-                certificateTags.add(tagRepository.findByName(tag.getName()));
-            }
-            certificate.setTags(certificateTags);
+            certificate.setTags(createCertificateTags(certificate));
             createdCertificate = Optional.of(giftCertificateRepository.save(certificate));
         }
         return createdCertificate;
@@ -77,12 +68,12 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
 
     @Override
     public Optional<GiftCertificate> findById(String id) {
-        Optional<GiftCertificate> certificateToFind = Optional.empty();
+        Optional<GiftCertificate> certificateToFind;
         try {
-            long certificateId = Long.parseLong(id);
+            Long certificateId = Long.parseLong(id);
             certificateToFind = giftCertificateRepository.findById(certificateId);
         } catch (NumberFormatException ignored) {
-
+            certificateToFind = Optional.empty();
         }
         return certificateToFind;
     }
@@ -121,8 +112,6 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
             if (wasUpdated) {
                 certificate.get().setLastUpdateDate(LocalDateTime.now());
                 giftCertificateRepository.save(certificate.get());
-            } else {
-                certificate = Optional.empty();
             }
         }
         return certificate;
@@ -134,11 +123,9 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
         Optional<Specification<GiftCertificate>> currentSpecification = defineSpecification(
                 filter.getSearchTypes(), filter.getTagNames(), filter.getCertificateNameOrDescription());
         Sort sortType = defineSortType(filter.getSortTypes());
-        if (currentSpecification.isPresent()) {
-            filteredCertificates = giftCertificateRepository.findAll(currentSpecification.get(), sortType);
-        } else {
-            filteredCertificates = giftCertificateRepository.findAll(sortType);
-        }
+        filteredCertificates = currentSpecification.map(giftCertificateSpecification ->
+                giftCertificateRepository.findAll(giftCertificateSpecification, sortType)).orElseGet(() ->
+                giftCertificateRepository.findAll(sortType));
         return filteredCertificates;
     }
 
@@ -228,6 +215,19 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
             }
         }
         for (Tag tag : requiredTags) {
+            certificateTags.add(tagRepository.findByName(tag.getName()));
+        }
+        return certificateTags;
+    }
+
+    private Set<Tag> createCertificateTags(GiftCertificate certificate) {
+        List<Tag> existingTags = tagRepository.findAll();
+        Set<Tag> requiredTags = certificate.getTags();
+        Set<Tag> certificateTags = new HashSet<>();
+        for (Tag tag : requiredTags) {
+            if (!existingTags.contains(tag)) {
+                tagRepository.save(tag);
+            }
             certificateTags.add(tagRepository.findByName(tag.getName()));
         }
         return certificateTags;

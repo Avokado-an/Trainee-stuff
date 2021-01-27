@@ -1,9 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.BankAcc;
-import com.epam.esm.entity.CertificateOrder;
 import com.epam.esm.entity.User;
-import com.epam.esm.entity.dto.CreateOrderDto;
 import com.epam.esm.entity.dto.CreateUserDto;
 import com.epam.esm.repository.BankAccRepository;
 import com.epam.esm.repository.UserRepository;
@@ -12,6 +10,7 @@ import com.epam.esm.validator.OrderValidator;
 import com.epam.esm.validator.UserValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,9 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -42,6 +38,11 @@ public class UserServiceTest {
         @Bean
         public UserValidator userValidator() {
             return new UserValidator();
+        }
+
+        @Bean
+        public ModelMapper modelMapper() {
+            return new ModelMapper();
         }
     }
 
