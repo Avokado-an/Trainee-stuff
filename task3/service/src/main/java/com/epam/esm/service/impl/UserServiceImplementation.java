@@ -66,9 +66,7 @@ public class UserServiceImplementation implements UserService {
         Optional<User> createdUser = Optional.empty();
         if (userValidator.validateUser(newUser)) {
             User user = modelMapper.map(newUser, User.class);
-            user = userRepository.save(user);
-            BankAcc bankAcc = createUserBankAcc(user);
-            user.setMoneyAccount(bankAcc);
+            user.setMoneyAccount(BankAcc.builder().moneyAmount(0L).build());
             user.setRoles(new HashSet<>(Collections.singleton(UserRole.CLIENT)));
             user.setCertificateOrders(new HashSet<>());
             createdUser = Optional.of(userRepository.save(user));
@@ -106,12 +104,5 @@ public class UserServiceImplementation implements UserService {
             searchedUser = Optional.empty();
         }
         return searchedUser;
-    }
-
-    private BankAcc createUserBankAcc(User user) {
-        BankAcc bankAcc = new BankAcc();
-        bankAcc.setMoneyAmount(0L);
-        bankAcc.setUser(user);
-        return bankAccRepository.save(bankAcc);
     }
 }
