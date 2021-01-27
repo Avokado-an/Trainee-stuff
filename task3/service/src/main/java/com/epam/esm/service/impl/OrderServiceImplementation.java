@@ -24,11 +24,16 @@ public class OrderServiceImplementation implements OrderService {
     private OrderRepository orderRepository;
     private OrderValidator orderValidator;
     private GiftCertificateServiceImplementation certificateService;
-    private final ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper;
 
     @Autowired
     public void setOrderRepository(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
+    }
+
+    @Autowired
+    public void setModelMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
     }
 
     @Autowired

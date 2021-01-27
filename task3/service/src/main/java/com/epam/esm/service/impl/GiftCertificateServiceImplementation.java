@@ -30,11 +30,16 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
     private GiftCertificateRepository giftCertificateRepository;
     private GiftCertificateValidator giftCertificateValidator;
     private TagRepository tagRepository;
-    private final ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper;
 
     @Autowired
     public void setGiftCertificateRepository(GiftCertificateRepository giftCertificateRepository) {
         this.giftCertificateRepository = giftCertificateRepository;
+    }
+
+    @Autowired
+    public void setModelMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
     }
 
     @Autowired
@@ -55,7 +60,7 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
         if (giftCertificateValidator.validateCertificate(certificate)) {
             certificate.setCreationDate(LocalDateTime.now());
             certificate.setLastUpdateDate(LocalDateTime.now());
-            /*List<Tag> existingTags = tagRepository.findAll();
+            List<Tag> existingTags = tagRepository.findAll();
             Set<Tag> requiredTags = certificate.getTags();
             Set<Tag> certificateTags = new HashSet<>();
             for (Tag tag : requiredTags) {
@@ -64,7 +69,7 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
                 }
                 certificateTags.add(tagRepository.findByName(tag.getName()));
             }
-            certificate.setTags(certificateTags);*/
+            certificate.setTags(certificateTags);
             createdCertificate = Optional.of(giftCertificateRepository.save(certificate));
         }
         return createdCertificate;
@@ -94,8 +99,8 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
         if (certificate.isPresent() && giftCertificateValidator.validateCertificate(certificate.get())) {
             certificate = Optional.of(modelMapper.map(updatedCertificate, GiftCertificate.class));
             certificate.get().setLastUpdateDate(LocalDateTime.now());
-            //Set<Tag> certificateTagsFromDb = updateCertificateTags(updatedCertificate.getTags());
-            //certificate.get().setTags(certificateTagsFromDb);
+            Set<Tag> certificateTagsFromDb = updateCertificateTags(updatedCertificate.getTags());
+            certificate.get().setTags(certificateTagsFromDb);
             giftCertificateRepository.save(certificate.get());
         }
         return certificate;

@@ -1,7 +1,6 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.entity.Tag;
-import com.epam.esm.entity.dto.MostPopularTagDto;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.TagService;
 import com.epam.esm.validator.TagValidator;

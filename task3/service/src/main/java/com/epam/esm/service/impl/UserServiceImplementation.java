@@ -28,11 +28,16 @@ public class UserServiceImplementation implements UserService {
     private BankAccRepository bankAccRepository;
     private OrderService orderService;
     private UserValidator userValidator;
-    private final ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setModelMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
     }
 
     @Autowired
