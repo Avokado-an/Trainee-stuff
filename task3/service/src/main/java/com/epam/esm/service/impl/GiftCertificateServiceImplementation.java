@@ -6,6 +6,7 @@ import com.epam.esm.entity.dto.CertificateFilterDto;
 import com.epam.esm.entity.dto.CreateGiftCertificateDto;
 import com.epam.esm.entity.dto.UpdateGiftCertificateDto;
 import com.epam.esm.entity.dto.UpdateGiftCertificateFieldDto;
+import com.epam.esm.entity.dto.representation.GiftCertificateRepresentationDto;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.repository.type.SearchType;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class GiftCertificateServiceImplementation implements GiftCertificateService {
@@ -54,71 +56,90 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
 
     @Override
     @Transactional
-    public Optional<GiftCertificate> create(CreateGiftCertificateDto giftCertificate) {
+    public Optional<GiftCertificateRepresentationDto> create(CreateGiftCertificateDto giftCertificate) {
         GiftCertificate certificate = modelMapper.map(giftCertificate, GiftCertificate.class);
-        Optional<GiftCertificate> createdCertificate = Optional.empty();
+        Optional<GiftCertificateRepresentationDto> representationCertificate = Optional.empty();
         if (giftCertificateValidator.validateCertificate(certificate)) {
             certificate.setCreationDate(LocalDateTime.now());
             certificate.setLastUpdateDate(LocalDateTime.now());
             certificate.setTags(createCertificateTags(certificate));
-            createdCertificate = Optional.of(giftCertificateRepository.save(certificate));
+            giftCertificateRepository.save(certificate);
+            representationCertificate = Optional.of(modelMapper.map(certificate, GiftCertificateRepresentationDto.class));
         }
-        return createdCertificate;
-    }
-
-    @Override
-    public Optional<GiftCertificate> findById(String id) {
-        Optional<GiftCertificate> certificateToFind;
-        try {
-            Long certificateId = Long.parseLong(id);
-            certificateToFind = giftCertificateRepository.findById(certificateId);
-        } catch (NumberFormatException ignored) {
-            certificateToFind = Optional.empty();
-        }
-        return certificateToFind;
-    }
-
-    @Override
-    public Page<GiftCertificate> findAll(Pageable pageable) {
-        return giftCertificateRepository.findAll(pageable);
+        return representationCertificate;
     }
 
     @Override
     @Transactional
-    public Optional<GiftCertificate> update(UpdateGiftCertificateDto updatedCertificate) {
+    public Optional<GiftCertificateRepresentationDto> findById(String id) {
+        Optional<GiftCertificate> certificateToFind;
+        Optional<GiftCertificateRepresentationDto> representationCertificate = Optional.empty();
+        try {
+            Long certificateId = Long.parseLong(id);
+            certificateToFind = giftCertificateRepository.findById(certificateId);
+            if (certificateToFind.isPresent()) {
+                representationCertificate = Optional.of(
+                        modelMapper.map(certificateToFind.get(), GiftCertificateRepresentationDto.class));
+            }
+        } catch (NumberFormatException ignored) {
+
+        }
+        return representationCertificate;
+    }
+
+    @Override
+    @Transactional
+    public Page<GiftCertificateRepresentationDto> findAll(Pageable pageable) {
+        return giftCertificateRepository.findAll(pageable)
+                .map(c -> modelMapper.map(c, GiftCertificateRepresentationDto.class));
+    }
+
+    @Override
+    @Transactional
+    public Optional<GiftCertificateRepresentationDto> update(UpdateGiftCertificateDto updatedCertificate) {
         Optional<GiftCertificate> certificate = giftCertificateRepository.findById(updatedCertificate.getId());
+        Optional<GiftCertificateRepresentationDto> certificateRepresentation = Optional.empty();
         if (certificate.isPresent() && giftCertificateValidator.validateCertificate(certificate.get())) {
             certificate = Optional.of(modelMapper.map(updatedCertificate, GiftCertificate.class));
             certificate.get().setLastUpdateDate(LocalDateTime.now());
             Set<Tag> certificateTagsFromDb = updateCertificateTags(updatedCertificate.getTags());
             certificate.get().setTags(certificateTagsFromDb);
             giftCertificateRepository.save(certificate.get());
+            certificateRepresentation = Optional.of(
+                    modelMapper.map(certificate.get(), GiftCertificateRepresentationDto.class));
         }
-        return certificate;
+        return certificateRepresentation;
     }
 
     @Transactional
     @Override
-    public Set<GiftCertificate> delete(long id) {
+    public Set<GiftCertificateRepresentationDto> delete(long id) {
         giftCertificateRepository.removeAllById(id);
-        return new HashSet<>(giftCertificateRepository.findAll());
+        return giftCertificateRepository.findAll().stream()
+                .map(c -> modelMapper.map(c, GiftCertificateRepresentationDto.class))
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public Optional<GiftCertificate> updateField(UpdateGiftCertificateFieldDto updatedField) {
+    @Transactional
+    public Optional<GiftCertificateRepresentationDto> updateField(UpdateGiftCertificateFieldDto updatedField) {
         Optional<GiftCertificate> certificate = giftCertificateRepository.findById(updatedField.getCertificateId());
+        Optional<GiftCertificateRepresentationDto> certificateRepresentation = Optional.empty();
         if (certificate.isPresent()) {
             boolean wasUpdated = updateField(updatedField, certificate.get());
             if (wasUpdated) {
                 certificate.get().setLastUpdateDate(LocalDateTime.now());
                 giftCertificateRepository.save(certificate.get());
+                certificateRepresentation = Optional.of(modelMapper
+                        .map(certificate.get(), GiftCertificateRepresentationDto.class));
             }
         }
-        return certificate;
+        return certificateRepresentation;
     }
 
     @Override
-    public List<GiftCertificate> filter(CertificateFilterDto filter) {
+    @Transactional
+    public List<GiftCertificateRepresentationDto> filter(CertificateFilterDto filter) {
         List<GiftCertificate> filteredCertificates;
         Optional<Specification<GiftCertificate>> currentSpecification = defineSpecification(
                 filter.getSearchTypes(), filter.getTagNames(), filter.getCertificateNameOrDescription());
@@ -126,7 +147,9 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
         filteredCertificates = currentSpecification.map(giftCertificateSpecification ->
                 giftCertificateRepository.findAll(giftCertificateSpecification, sortType)).orElseGet(() ->
                 giftCertificateRepository.findAll(sortType));
-        return filteredCertificates;
+        return filteredCertificates.stream()
+                .map(c -> modelMapper.map(c, GiftCertificateRepresentationDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override

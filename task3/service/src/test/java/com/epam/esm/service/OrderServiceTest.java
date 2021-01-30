@@ -4,6 +4,7 @@ import com.epam.esm.entity.CertificateOrder;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.User;
 import com.epam.esm.entity.dto.CreateOrderDto;
+import com.epam.esm.entity.dto.representation.OrderRepresentationDto;
 import com.epam.esm.repository.OrderRepository;
 import com.epam.esm.service.impl.GiftCertificateServiceImplementation;
 import com.epam.esm.service.impl.OrderServiceImplementation;
@@ -62,14 +63,14 @@ public class OrderServiceTest {
         String userId = "1";
         when(orderRepository.findMostExpensiveUserOrder(any(Long.class))).thenReturn(Arrays
                 .asList(new CertificateOrder(), new CertificateOrder()));
-        List<CertificateOrder> orders = orderService.findMostExpensiveUserOrder(userId);
+        List<OrderRepresentationDto> orders = orderService.findMostExpensiveUserOrder(userId);
         assertEquals(2, orders.size());
     }
 
     @Test
     public void findMostExpensiveUserOrderInvalidTest() {
         String userId = "1QWERWEFSFL";
-        List<CertificateOrder> orders = orderService.findMostExpensiveUserOrder(userId);
+        List<OrderRepresentationDto> orders = orderService.findMostExpensiveUserOrder(userId);
         assertEquals(0, orders.size());
     }
 
@@ -79,7 +80,7 @@ public class OrderServiceTest {
         String orderId = "1";
         when(orderRepository.findByIdAndOwner(any(Long.class), any(User.class)))
                 .thenReturn(Optional.of(new CertificateOrder()));
-        Optional<CertificateOrder> order = orderService.findUserOrderById(userId, orderId);
+        Optional<OrderRepresentationDto> order = orderService.findUserOrderById(userId, orderId);
         assertTrue(order.isPresent());
     }
 
@@ -87,7 +88,7 @@ public class OrderServiceTest {
     public void findUserOrderByIdOrderInvalidTest() {
         String userId = "1QWERWEFSFL";
         String orderId = "werwfief";
-        Optional<CertificateOrder> order = orderService.findUserOrderById(userId, orderId);
+        Optional<OrderRepresentationDto> order = orderService.findUserOrderById(userId, orderId);
         assertFalse(order.isPresent());
     }
 
@@ -95,14 +96,14 @@ public class OrderServiceTest {
     public void findUserOrdersValidTest() {
         String userId = "1";
         when(orderRepository.findAllByOwner(any(User.class), any(Pageable.class))).thenReturn(Page.empty());
-        Page<CertificateOrder> orders = orderService.findUserOrders(userId, Pageable.unpaged());
+        Page<OrderRepresentationDto> orders = orderService.findUserOrders(userId, Pageable.unpaged());
         assertEquals(0, orders.getTotalElements());
     }
 
     @Test
     public void findUserOrdersInvalidTest() {
         String userId = "1QWERWEFSFL";
-        Page<CertificateOrder> orders = orderService.findUserOrders(userId, Pageable.unpaged());
+        Page<OrderRepresentationDto> orders = orderService.findUserOrders(userId, Pageable.unpaged());
         assertEquals(0, orders.getTotalElements());
     }
 
@@ -132,10 +133,8 @@ public class OrderServiceTest {
                 .thenReturn(Arrays.asList(GiftCertificate.builder().price(100L).build(),
                         GiftCertificate.builder().price(120L).build()));
         when(orderRepository.save(any(CertificateOrder.class))).thenReturn(new CertificateOrder());
-        CreateOrderDto orderDto = new CreateOrderDto();
-        orderDto.setBuyerId(1L);
-        orderDto.setOrderedCertificatesId(new ArrayList<>());
-        Optional<CertificateOrder> actualOrder = orderService.create(orderDto);
+        CreateOrderDto orderDto = new CreateOrderDto(1L, new ArrayList<>());
+        Optional<OrderRepresentationDto> actualOrder = orderService.create(orderDto);
         assertTrue(actualOrder.isPresent());
     }
 
@@ -147,7 +146,7 @@ public class OrderServiceTest {
         CreateOrderDto orderDto = new CreateOrderDto();
         orderDto.setBuyerId(1L);
         orderDto.setOrderedCertificatesId(new ArrayList<>());
-        Optional<CertificateOrder> actualOrder = orderService.create(orderDto);
+        Optional<OrderRepresentationDto> actualOrder = orderService.create(orderDto);
         assertFalse(actualOrder.isPresent());
     }
 }

@@ -2,9 +2,6 @@ package com.epam.esm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,9 +11,9 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "owner")
+@EqualsAndHashCode(exclude = "owner", callSuper = false)
 @Builder
-public class CertificateOrder extends RepresentationModel<CertificateOrder> {
+public class CertificateOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -26,8 +23,7 @@ public class CertificateOrder extends RepresentationModel<CertificateOrder> {
     @JoinColumn(name = "user_id")
     private User owner;
 
-    @ManyToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "Order_certificates",
             joinColumns = {@JoinColumn(name = "gift_certificate_id")},

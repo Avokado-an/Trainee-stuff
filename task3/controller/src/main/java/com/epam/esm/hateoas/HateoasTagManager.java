@@ -1,7 +1,7 @@
 package com.epam.esm.hateoas;
 
 import com.epam.esm.controller.TagCertificateController;
-import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.representation.TagRepresentationDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
@@ -13,10 +13,10 @@ public class HateoasTagManager {
     private HateoasTagManager() {
     }
 
-    public static void manageTagLinks(Page<Tag> tags, Pageable pageable) {
+    public static void manageTagLinks(Page<TagRepresentationDto> tags, Pageable pageable) {
         Link selfLink = linkTo(methodOn(TagCertificateController.class)
                 .showTags(pageable)).withSelfRel();
-        for (Tag tag : tags) {
+        for (TagRepresentationDto tag : tags) {
             tag.add(selfLink);
         }
     }

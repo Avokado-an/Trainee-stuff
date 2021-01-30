@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,14 +12,13 @@ import java.util.Set;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "name")
 @Entity
-public class Tag extends RepresentationModel<Tag> {
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     @JsonIgnore
-    @LazyCollection(LazyCollectionOption.FALSE)
     private Set<GiftCertificate> certificates;
 
     private String name;

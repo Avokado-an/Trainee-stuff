@@ -1,9 +1,11 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.representation.TagRepresentationDto;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.TagService;
 import com.epam.esm.validator.TagValidator;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,11 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TagServiceImplementation implements TagService {
     private TagRepository tagRepository;
     private TagValidator tagValidator;
+    private ModelMapper modelMapper;
 
     @Autowired
     public void setTagRepository(TagRepository tagRepository) {
@@ -27,28 +31,40 @@ public class TagServiceImplementation implements TagService {
         this.tagValidator = tagValidator;
     }
 
-    @Override
-    public Page<Tag> viewAll(Pageable pageable) {
-        return tagRepository.findAll(pageable);
+    @Autowired
+    public void setModelMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public Optional<Tag> create(String tagName) {
+    @Transactional
+    public Page<TagRepresentationDto> viewAll(Pageable pageable) {
+        return tagRepository.findAll(pageable).map(t -> modelMapper.map(t, TagRepresentationDto.class));
+    }
+
+    @Override
+    @Transactional
+    public Optional<TagRepresentationDto> create(String tagName) {
         Tag tag = new Tag();
         tag.setName(tagName);
-        Optional<Tag> createdTag = Optional.empty();
+        Optional<Tag> createdTag;
+        Optional<TagRepresentationDto> tagRepresentation = Optional.empty();
         if (tagValidator.validateTag(tag)) {
             createdTag = Optional.of(tagRepository.save(tag));
+            tagRepresentation = Optional.of(modelMapper.map(createdTag.get(), TagRepresentationDto.class));
         }
-        return createdTag;
+        return tagRepresentation;
     }
 
     @Override
-    public List<Tag> findMostUsedUserTag(String userId) {
-        List<Tag> tags;
+    @Transactional
+    public List<TagRepresentationDto> findMostUsedUserTag(String userId) {
+        List<TagRepresentationDto> tags;
         try {
             long userIdValue = Long.parseLong(userId);
-            tags = tagRepository.findMostUsedUserTag(userIdValue);
+            tags = tagRepository.findMostUsedUserTag(userIdValue).stream()
+                    .map(t -> modelMapper.map(t, TagRepresentationDto.class))
+                    .collect(Collectors.toList());
         } catch (NumberFormatException e) {
             tags = new ArrayList<>();
         }
@@ -57,8 +73,10 @@ public class TagServiceImplementation implements TagService {
 
     @Override
     @Transactional
-    public Set<Tag> delete(long id) {
+    public Set<TagRepresentationDto> delete(long id) {
         tagRepository.removeAllById(id);
-        return new HashSet<>(tagRepository.findAll());
+        return new HashSet<>(tagRepository.findAll()).stream()
+                .map(t -> modelMapper.map(t, TagRepresentationDto.class))
+                .collect(Collectors.toSet());
     }
 }

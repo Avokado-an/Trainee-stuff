@@ -2,6 +2,7 @@ package com.epam.esm.service;
 
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.dto.UpdateGiftCertificateFieldDto;
+import com.epam.esm.entity.dto.representation.GiftCertificateRepresentationDto;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.repository.type.CertificateFieldsType;
@@ -53,21 +54,18 @@ public class GiftCertificateServiceTest {
     @Autowired
     private GiftCertificateService giftCertificateService;
 
-    @Autowired
-    private GiftCertificateValidator giftCertificateValidator;
-
     @Test
     public void findByIdValidTest() {
         String id = "5";
         when(giftCertificateRepository.findById(any(Long.class))).thenReturn(Optional.of(new GiftCertificate()));
-        Optional<GiftCertificate> certificate = giftCertificateService.findById(id);
+        Optional<GiftCertificateRepresentationDto> certificate = giftCertificateService.findById(id);
         assertTrue(certificate.isPresent());
     }
 
     @Test
     public void findByIdInvalidTest() {
         String id = "5lll";
-        Optional<GiftCertificate> certificate = giftCertificateService.findById(id);
+        Optional<GiftCertificateRepresentationDto> certificate = giftCertificateService.findById(id);
         assertFalse(certificate.isPresent());
     }
 
@@ -82,7 +80,7 @@ public class GiftCertificateServiceTest {
     @Test
     public void findAllValidTest() {
         when(giftCertificateRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
-        Page<GiftCertificate> certificates = giftCertificateService.findAll(Pageable.unpaged());
+        Page<GiftCertificateRepresentationDto> certificates = giftCertificateService.findAll(Pageable.unpaged());
         assertEquals(0, certificates.getTotalElements());
     }
 
@@ -96,8 +94,8 @@ public class GiftCertificateServiceTest {
                 .description("qewr").name("qwer").tags(new HashSet<>()).name("name").build());
         when(giftCertificateRepository.findById(any(Long.class))).thenReturn(certificate);
         when(giftCertificateRepository.save(any(GiftCertificate.class))).thenReturn(certificate.get());
-        certificate = giftCertificateService.updateField(updatedField);
-        assertEquals(certificate.get().getName(), updatedField.getEditedValue());
+        Optional<GiftCertificateRepresentationDto> editedCertificate = giftCertificateService.updateField(updatedField);
+        assertEquals(editedCertificate.get().getName(), updatedField.getEditedValue());
     }
 
     @Test
@@ -110,8 +108,8 @@ public class GiftCertificateServiceTest {
                 .description("qewr").name("qwer").tags(new HashSet<>()).name("name").build());
         when(giftCertificateRepository.findById(any(Long.class))).thenReturn(certificate);
         when(giftCertificateRepository.save(any(GiftCertificate.class))).thenReturn(certificate.get());
-        certificate = giftCertificateService.updateField(updatedField);
-        assertNotEquals(certificate.get().getPrice(), updatedField.getEditedValue());
+        Optional<GiftCertificateRepresentationDto> editedCertificate = giftCertificateService.updateField(updatedField);
+        assertFalse(editedCertificate.isPresent());
     }
 
     @Test

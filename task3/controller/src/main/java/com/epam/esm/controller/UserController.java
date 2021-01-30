@@ -4,6 +4,9 @@ import com.epam.esm.entity.CertificateOrder;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.User;
 import com.epam.esm.entity.dto.CreateUserDto;
+import com.epam.esm.entity.dto.representation.OrderRepresentationDto;
+import com.epam.esm.entity.dto.representation.TagRepresentationDto;
+import com.epam.esm.entity.dto.representation.UserRepresentationDto;
 import com.epam.esm.error.ErrorCode;
 import com.epam.esm.error.ErrorHandler;
 import com.epam.esm.service.OrderService;
@@ -46,53 +49,54 @@ public class UserController {
     }
 
     @GetMapping
-    public Page<User> viewAllUsers(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<User> users = userService.findAllUsers(pageable);
+    public Page<UserRepresentationDto> viewAllUsers(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<UserRepresentationDto> users = userService.findAllUsers(pageable);
         manageAllUsersLinks(users, pageable);
         return users;
     }
 
     @PostMapping
-    public Optional<User> createUser(@RequestBody CreateUserDto newUSer) {
+    public Optional<UserRepresentationDto> createUser(@RequestBody CreateUserDto newUSer) {
         return userService.createUser(newUSer);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Optional<User>> viewUserById(@PathVariable String userId) {
-        Optional<User> user = userService.findById(userId);
+    public ResponseEntity<Optional<UserRepresentationDto>> viewUserById(@PathVariable String userId) {
+        Optional<UserRepresentationDto> user = userService.findById(userId);
         manageUserLinks(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/orders")
-    public Page<CertificateOrder> viewUserOrders(@PathVariable String userId, @PageableDefault(
+    public Page<OrderRepresentationDto> viewUserOrders(@PathVariable String userId, @PageableDefault(
             sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<CertificateOrder> orders = orderService.findUserOrders(userId, pageable);
+        Page<OrderRepresentationDto> orders = orderService.findUserOrders(userId, pageable);
         manageUserOrdersLinks(orders, userId, pageable);
         return orders;
     }
 
     @PostMapping("{userId}/orders/popular_tag")
-    public List<Tag> viewMostUsedTag(@PathVariable String userId) {
+    public List<TagRepresentationDto> viewMostUsedTag(@PathVariable String userId) {
         return tagService.findMostUsedUserTag(userId);
     }
 
     @PostMapping("{userId}/orders/max_price")
-    public List<CertificateOrder> viewMostExpensiveOrder(@PathVariable String userId) {
+    public List<OrderRepresentationDto> viewMostExpensiveOrder(@PathVariable String userId) {
         return orderService.findMostExpensiveUserOrder(userId);
     }
 
     @GetMapping("/{userId}/orders/{orderId}")
-    public ResponseEntity<Optional<CertificateOrder>> viewUserOrderById(
+    public ResponseEntity<Optional<OrderRepresentationDto>> viewUserOrderById(
             @PathVariable String userId, @PathVariable String orderId) {
-        Optional<CertificateOrder> order = orderService.findUserOrderById(userId, orderId);
+        Optional<OrderRepresentationDto> order = orderService.findUserOrderById(userId, orderId);
         manageUserOrderLinks(order, userId);
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorHandler handleIncorrectParameterValueException(Exception exception) {
-        return new ErrorHandler(exception.getMessage(), ErrorCode.RESOURCE_NOT_FOUND);
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorHandler handleResourceNotFoundException(Exception exception) {
+        return new ErrorHandler(exception.getMessage(), ErrorCode.RESOURCE_NOT_FOUND.getErrorCode());
     }
 }

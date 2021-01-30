@@ -2,9 +2,9 @@ package com.epam.esm.hateoas;
 
 import com.epam.esm.controller.GiftCertificateController;
 import com.epam.esm.controller.UserController;
-import com.epam.esm.entity.CertificateOrder;
-import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.User;
+import com.epam.esm.entity.dto.representation.GiftCertificateRepresentationDto;
+import com.epam.esm.entity.dto.representation.OrderRepresentationDto;
+import com.epam.esm.entity.dto.representation.UserRepresentationDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
@@ -24,8 +24,8 @@ public class HateoasUserManager {
     private HateoasUserManager() {
     }
 
-    public static void manageAllUsersLinks(Page<User> users, Pageable pageable) {
-        for (User user : users) {
+    public static void manageAllUsersLinks(Page<UserRepresentationDto> users, Pageable pageable) {
+        for (UserRepresentationDto user : users) {
             Link selfLink = linkTo(methodOn(UserController.class)
                     .viewAllUsers(pageable)).withSelfRel();
             Link userLink = linkTo(methodOn(UserController.class)
@@ -36,7 +36,7 @@ public class HateoasUserManager {
         }
     }
 
-    public static void manageUserLinks(Optional<User> user) {
+    public static void manageUserLinks(Optional<UserRepresentationDto> user) {
         if (user.isPresent()) {
             Link usersLink = linkTo(methodOn(UserController.class)
                     .viewAllUsers(Pageable.unpaged())).withRel(USERS);
@@ -48,8 +48,8 @@ public class HateoasUserManager {
         }
     }
 
-    public static void manageUserOrdersLinks(Page<CertificateOrder> orders, String userId, Pageable pageable) {
-        for (CertificateOrder order : orders) {
+    public static void manageUserOrdersLinks(Page<OrderRepresentationDto> orders, String userId, Pageable pageable) {
+        for (OrderRepresentationDto order : orders) {
             Link selfLink = linkTo(methodOn(UserController.class)
                     .viewUserOrders(userId, pageable)).withSelfRel();
             Link userLink = linkTo(methodOn(UserController.class)
@@ -60,7 +60,7 @@ public class HateoasUserManager {
         }
     }
 
-    public static void manageUserOrderLinks(Optional<CertificateOrder> order, String userId) {
+    public static void manageUserOrderLinks(Optional<OrderRepresentationDto> order, String userId) {
         if (order.isPresent()) {
             Link selfLink = linkTo(methodOn(UserController.class)
                     .viewUserOrderById(userId, order.get().getId().toString())).withSelfRel();
@@ -68,7 +68,7 @@ public class HateoasUserManager {
                     .viewUserById(userId)).withRel(USER);
             Link userOrdersLink = linkTo(methodOn(UserController.class)
                     .viewUserOrders(userId, Pageable.unpaged())).withRel(ORDERS);
-            for (GiftCertificate certificate : order.get().getCertificates()) {
+            for (GiftCertificateRepresentationDto certificate : order.get().getCertificates()) {
                 Link certificateLink = linkTo(methodOn(GiftCertificateController.class)
                         .showCertificates(certificate.getId().toString())).withRel(CERTIFICATE);
                 certificate.add(certificateLink);

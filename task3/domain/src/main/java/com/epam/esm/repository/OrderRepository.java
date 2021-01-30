@@ -16,7 +16,7 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<CertificateOrder, Long>, JpaSpecificationExecutor<CertificateOrder> {
     @Query(value = "select certificate_order.* from certificate_order " +
-            "where total_price = (select max(total_price) from certificate_order) and user_id = 1;",
+            "where total_price = (select max(total_price) from certificate_order where user_id = :userId) and user_id = :userId",
             nativeQuery = true)
     List<CertificateOrder> findMostExpensiveUserOrder(@Param("userId") Long userId);
 

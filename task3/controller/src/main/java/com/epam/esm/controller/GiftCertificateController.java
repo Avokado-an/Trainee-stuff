@@ -1,8 +1,8 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.entity.CertificateOrder;
-import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.dto.*;
+import com.epam.esm.entity.dto.representation.GiftCertificateRepresentationDto;
+import com.epam.esm.entity.dto.representation.OrderRepresentationDto;
 import com.epam.esm.error.ErrorCode;
 import com.epam.esm.error.ErrorHandler;
 import com.epam.esm.service.GiftCertificateService;
@@ -40,53 +40,53 @@ public class GiftCertificateController {
     }
 
     @GetMapping()
-    public Page<GiftCertificate> showCertificates(@PageableDefault(
+    public Page<GiftCertificateRepresentationDto> showCertificates(@PageableDefault(
             sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<GiftCertificate> pageCertificates = giftCertificateService.findAll(pageable);
+        Page<GiftCertificateRepresentationDto> pageCertificates = giftCertificateService.findAll(pageable);
         manageCertificatesLinks(pageCertificates);
         return pageCertificates;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<GiftCertificate>> showCertificates(@PathVariable String id) {
-        Optional<GiftCertificate> certificate = giftCertificateService.findById(id);
+    public ResponseEntity<Optional<GiftCertificateRepresentationDto>> showCertificates(@PathVariable String id) {
+        Optional<GiftCertificateRepresentationDto> certificate = giftCertificateService.findById(id);
         manageSpecificCertificateLinks(certificate);
         return new ResponseEntity<>(certificate, HttpStatus.OK);
     }
 
     @DeleteMapping
-    public Set<GiftCertificate> deleteCertificate(@RequestBody IdDto idDto) {
+    public Set<GiftCertificateRepresentationDto> deleteCertificate(@RequestBody IdDto idDto) {
         return giftCertificateService.delete(idDto.getId());
     }
 
     @PutMapping
-    public Optional<GiftCertificate> updateCertificate(@RequestBody UpdateGiftCertificateDto updatedCertificate) {
+    public Optional<GiftCertificateRepresentationDto> updateCertificate(@RequestBody UpdateGiftCertificateDto updatedCertificate) {
         return giftCertificateService.update(updatedCertificate);
     }
 
     @PostMapping
-    public Optional<GiftCertificate> addCertificate(@RequestBody CreateGiftCertificateDto newCertificate) {
+    public Optional<GiftCertificateRepresentationDto> addCertificate(@RequestBody CreateGiftCertificateDto newCertificate) {
         return giftCertificateService.create(newCertificate);
     }
 
     @PostMapping("/filter")
-    public List<GiftCertificate> filterCertificates(@RequestBody CertificateFilterDto filterDto) {
+    public List<GiftCertificateRepresentationDto> filterCertificates(@RequestBody CertificateFilterDto filterDto) {
         return giftCertificateService.filter(filterDto);
     }
 
     @PutMapping("/edit")
-    public Optional<GiftCertificate> updateCertificateField(@RequestBody UpdateGiftCertificateFieldDto updatedField) {
+    public Optional<GiftCertificateRepresentationDto> updateField(@RequestBody UpdateGiftCertificateFieldDto updatedField) {
         return giftCertificateService.updateField(updatedField);
     }
 
     @PostMapping("/order")
-    public Optional<CertificateOrder> orderCertificate(@RequestBody CreateOrderDto newOrder) {
+    public Optional<OrderRepresentationDto> orderCertificate(@RequestBody CreateOrderDto newOrder) {
         return userService.makeOrder(newOrder);
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorHandler handleIncorrectParameterValueException(Exception exception) {
-        return new ErrorHandler(exception.getMessage(), ErrorCode.RESOURCE_NOT_FOUND);
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorHandler handleResourceNotFoundException(Exception exception) {
+        return new ErrorHandler(exception.getMessage(), ErrorCode.RESOURCE_NOT_FOUND.getErrorCode());
     }
 }

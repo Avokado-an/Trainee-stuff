@@ -1,8 +1,8 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.dto.CreateTagDto;
 import com.epam.esm.entity.dto.IdDto;
+import com.epam.esm.entity.dto.representation.TagRepresentationDto;
 import com.epam.esm.error.ErrorCode;
 import com.epam.esm.error.ErrorHandler;
 import com.epam.esm.service.TagService;
@@ -30,25 +30,25 @@ public class TagCertificateController {
     }
 
     @GetMapping
-    public Page<Tag> showTags(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<Tag> tags = tagService.viewAll(pageable);
+    public Page<TagRepresentationDto> showTags(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<TagRepresentationDto> tags = tagService.viewAll(pageable);
         manageTagLinks(tags, pageable);
         return tags;
     }
 
     @DeleteMapping
-    public Set<Tag> deleteTag(@RequestBody IdDto idDto) {
+    public Set<TagRepresentationDto> deleteTag(@RequestBody IdDto idDto) {
         return tagService.delete(idDto.getId());
     }
 
     @PostMapping
-    public Optional<Tag> createTag(@RequestBody CreateTagDto tag) {
+    public Optional<TagRepresentationDto> createTag(@RequestBody CreateTagDto tag) {
         return tagService.create(tag.getName());
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorHandler handleIncorrectParameterValueException(Exception exception) {
-        return new ErrorHandler(exception.getMessage(), ErrorCode.RESOURCE_NOT_FOUND);
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorHandler handleResourceNotFoundException(Exception exception) {
+        return new ErrorHandler(exception.getMessage(), ErrorCode.RESOURCE_NOT_FOUND.getErrorCode());
     }
 }

@@ -3,6 +3,7 @@ package com.epam.esm.service;
 import com.epam.esm.entity.BankAcc;
 import com.epam.esm.entity.User;
 import com.epam.esm.entity.dto.CreateUserDto;
+import com.epam.esm.entity.dto.representation.UserRepresentationDto;
 import com.epam.esm.repository.BankAccRepository;
 import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.impl.UserServiceImplementation;
@@ -64,7 +65,7 @@ public class UserServiceTest {
     @Test
     public void findAllUsersValidTest() {
         when(userRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
-        Page<User> users = userService.findAllUsers(Pageable.unpaged());
+        Page<UserRepresentationDto> users = userService.findAllUsers(Pageable.unpaged());
         assertEquals(0, users.getTotalElements());
     }
 
@@ -72,14 +73,14 @@ public class UserServiceTest {
     public void findByIdValidTest() {
         String id = "1";
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(new User()));
-        Optional<User> user = userService.findById(id);
+        Optional<UserRepresentationDto> user = userService.findById(id);
         assertTrue(user.isPresent());
     }
 
     @Test
     public void findByIdInvalidTest() {
         String id = "1sfdrgrdrg";
-        Optional<User> user = userService.findById(id);
+        Optional<UserRepresentationDto> user = userService.findById(id);
         assertFalse(user.isPresent());
     }
 
@@ -92,7 +93,7 @@ public class UserServiceTest {
         CreateUserDto createdUser = new CreateUserDto();
         createdUser.setBirthday(birthday);
         createdUser.setUsername(name);
-        Optional<User> user = userService.createUser(createdUser);
+        Optional<UserRepresentationDto> user = userService.createUser(createdUser);
         assertTrue(user.isPresent());
     }
 
@@ -103,7 +104,7 @@ public class UserServiceTest {
         CreateUserDto createdUser = new CreateUserDto();
         createdUser.setBirthday(birthday);
         createdUser.setUsername(name);
-        Optional<User> user = userService.createUser(createdUser);
+        Optional<UserRepresentationDto> user = userService.createUser(createdUser);
         assertFalse(user.isPresent());
     }
 }

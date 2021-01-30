@@ -1,7 +1,7 @@
 package com.epam.esm.hateoas;
 
 import com.epam.esm.controller.GiftCertificateController;
-import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.dto.representation.GiftCertificateRepresentationDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
@@ -17,7 +17,7 @@ public class HateoasCertificateManager {
     private HateoasCertificateManager() {
     }
 
-    public static void manageSpecificCertificateLinks(Optional<GiftCertificate> certificate) {
+    public static void manageSpecificCertificateLinks(Optional<GiftCertificateRepresentationDto> certificate) {
         if (certificate.isPresent()) {
             Link selfLink = linkTo(methodOn(GiftCertificateController.class)
                     .showCertificates(certificate.get().getId().toString())).withSelfRel();
@@ -27,8 +27,8 @@ public class HateoasCertificateManager {
         }
     }
 
-    public static void manageCertificatesLinks(Page<GiftCertificate> pageCertificates) {
-        for (GiftCertificate certificate : pageCertificates) {
+    public static void manageCertificatesLinks(Page<GiftCertificateRepresentationDto> pageCertificates) {
+        for (GiftCertificateRepresentationDto certificate : pageCertificates) {
             Link selfLink = linkTo(methodOn(GiftCertificateController.class)
                     .showCertificates(certificate.getId().toString())).withSelfRel();
             certificate.add(selfLink);

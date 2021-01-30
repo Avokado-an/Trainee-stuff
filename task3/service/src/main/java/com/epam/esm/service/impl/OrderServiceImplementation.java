@@ -1,9 +1,10 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.CertificateOrder;
+import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.User;
 import com.epam.esm.entity.dto.CreateOrderDto;
+import com.epam.esm.entity.dto.representation.OrderRepresentationDto;
 import com.epam.esm.repository.OrderRepository;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.validator.OrderValidator;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,8 +49,9 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    public Optional<CertificateOrder> create(CreateOrderDto newOrder) {
-        Optional<CertificateOrder> createdOrder = Optional.empty();
+    @Transactional
+    public Optional<OrderRepresentationDto> create(CreateOrderDto newOrder) {
+        Optional<OrderRepresentationDto> createdOrder = Optional.empty();
         long totalPrice = calculateTotalPrice(newOrder.getOrderedCertificatesId());
         if (orderValidator.validateOrder(totalPrice)) {
             CertificateOrder certificateOrder = modelMapper.map(newOrder, CertificateOrder.class);
@@ -57,7 +60,8 @@ public class OrderServiceImplementation implements OrderService {
             certificateOrder.setOwner(user);
             certificateOrder.setCreationTime(LocalDateTime.now());
             certificateOrder.setTotalPrice(totalPrice);
-            createdOrder = Optional.of(orderRepository.save(certificateOrder));
+            createdOrder = Optional.of(modelMapper
+                    .map(orderRepository.save(certificateOrder), OrderRepresentationDto.class));
         }
         return createdOrder;
     }
@@ -69,38 +73,46 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    public Page<CertificateOrder> findUserOrders(String userId, Pageable pageable) {
-        Page<CertificateOrder> certificateOrders;
+    @Transactional
+    public Page<OrderRepresentationDto> findUserOrders(String userId, Pageable pageable) {
+        Page<OrderRepresentationDto> orders;
         try {
-            long id = Long.parseLong(userId);
-            User user = User.builder().id(id).build();
-            certificateOrders = orderRepository.findAllByOwner(user, pageable);
+            long userIdValue = Long.parseLong(userId);
+            User user = User.builder().id(userIdValue).build();
+            orders = orderRepository.findAllByOwner(user, pageable)
+                    .map(o -> modelMapper.map(o, OrderRepresentationDto.class));
         } catch (NumberFormatException e) {
-            certificateOrders = Page.empty();
+            orders = Page.empty();
         }
-        return certificateOrders;
+        return orders;
     }
 
     @Override
-    public Optional<CertificateOrder> findUserOrderById(String userId, String orderId) {
-        Optional<CertificateOrder> order;
+    @Transactional
+    public Optional<OrderRepresentationDto> findUserOrderById(String userId, String orderId) {
+        Optional<OrderRepresentationDto> orderRepresentation = Optional.empty();
         try {
-            long userIdValue = Long.parseLong(userId);
+            Long userIdValue = Long.parseLong(userId);
             long orderIdValue = Long.parseLong(orderId);
             User user = User.builder().id(userIdValue).build();
-            order = orderRepository.findByIdAndOwner(orderIdValue, user);
+            Optional<CertificateOrder> order = orderRepository.findByIdAndOwner(orderIdValue, user);
+            if (order.isPresent()) {
+                orderRepresentation = Optional.of(modelMapper.map(order.get(), OrderRepresentationDto.class));
+            }
         } catch (NumberFormatException e) {
-            order = Optional.empty();
+            orderRepresentation = Optional.empty();
         }
-        return order;
+        return orderRepresentation;
     }
 
     @Override
-    public List<CertificateOrder> findMostExpensiveUserOrder(String userId) {
-        List<CertificateOrder> mostExpensiveOrder;
+    @Transactional
+    public List<OrderRepresentationDto> findMostExpensiveUserOrder(String userId) {
+        List<OrderRepresentationDto> mostExpensiveOrder;
         try {
             long userIdValue = Long.parseLong(userId);
-            mostExpensiveOrder = orderRepository.findMostExpensiveUserOrder(userIdValue);
+            mostExpensiveOrder = orderRepository.findMostExpensiveUserOrder(userIdValue).stream()
+                    .map(o -> modelMapper.map(o, OrderRepresentationDto.class)).collect(Collectors.toList());
         } catch (NumberFormatException e) {
             mostExpensiveOrder = new ArrayList<>();
         }

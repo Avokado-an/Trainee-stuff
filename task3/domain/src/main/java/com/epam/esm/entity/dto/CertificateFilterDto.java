@@ -10,8 +10,8 @@ import java.util.List;
 @Builder
 @Data
 public class CertificateFilterDto {
-    List<String> tagNames;
-    String certificateNameOrDescription;
-    List<SortType> sortTypes;
-    List<SearchType> searchTypes;
+    private List<String> tagNames;
+    private String certificateNameOrDescription;
+    private List<SortType> sortTypes;
+    private List<SearchType> searchTypes;
 }

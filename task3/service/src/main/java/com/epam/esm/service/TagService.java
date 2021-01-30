@@ -1,6 +1,6 @@
 package com.epam.esm.service;
 
-import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.representation.TagRepresentationDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,11 +9,11 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface TagService {
-    Page<Tag> viewAll(Pageable pageable);
+    Page<TagRepresentationDto> viewAll(Pageable pageable);
 
-    Optional<Tag> create(String tagName);
+    Optional<TagRepresentationDto> create(String tagName);
 
-    List<Tag> findMostUsedUserTag(String userId);
+    List<TagRepresentationDto> findMostUsedUserTag(String userId);
 
-    Set<Tag> delete(long id);
+    Set<TagRepresentationDto> delete(long id);
 }

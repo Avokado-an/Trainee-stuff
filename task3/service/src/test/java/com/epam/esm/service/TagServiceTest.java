@@ -1,11 +1,13 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.dto.representation.TagRepresentationDto;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.impl.TagServiceImplementation;
 import com.epam.esm.validator.TagValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,6 +35,11 @@ public class TagServiceTest {
         public TagValidator tagValidator() {
             return new TagValidator();
         }
+
+        @Bean
+        public ModelMapper modelMapper() {
+            return new ModelMapper();
+        }
     }
 
     @Autowired
@@ -51,7 +58,7 @@ public class TagServiceTest {
     public void createTagValidTest() {
         String tagName = "tag1";
         when(tagRepository.save(any(Tag.class))).thenReturn(new Tag(tagName));
-        Optional<Tag> savedTag = tagService.create(tagName);
+        Optional<TagRepresentationDto> savedTag = tagService.create(tagName);
         assertTrue(savedTag.isPresent());
     }
 
@@ -59,7 +66,7 @@ public class TagServiceTest {
     public void createTagInvalidTest() {
         String tagName = "tag1$#$#$#$#";
         when(tagRepository.save(any(Tag.class))).thenReturn(new Tag(tagName));
-        Optional<Tag> savedTag = tagService.create(tagName);
+        Optional<TagRepresentationDto> savedTag = tagService.create(tagName);
         assertFalse(savedTag.isPresent());
     }
 
@@ -78,14 +85,16 @@ public class TagServiceTest {
         String userName = "1";
         Tag tag = new Tag("most popular tag");
         when(tagRepository.findMostUsedUserTag(any(Long.class))).thenReturn(new ArrayList<>(Collections.singleton(tag)));
-        List<Tag> mostPopularTag = tagService.findMostUsedUserTag(userName);
-        assertEquals(mostPopularTag.get(0), tag);
+        List<TagRepresentationDto> mostPopularTag = tagService.findMostUsedUserTag(userName);
+        TagRepresentationDto expectedTag = new TagRepresentationDto();
+        expectedTag.setName(tag.getName());
+        assertEquals(mostPopularTag.get(0), expectedTag);
     }
 
     @Test
     public void findMostUsedUserTagInvalidTest() {
         String userName = "1asdfasfasdf";
-        List<Tag> mostPopularTag = tagService.findMostUsedUserTag(userName);
+        List<TagRepresentationDto> mostPopularTag = tagService.findMostUsedUserTag(userName);
         assertTrue(mostPopularTag.isEmpty());
     }
 }

@@ -6,6 +6,8 @@ import com.epam.esm.entity.User;
 import com.epam.esm.entity.UserRole;
 import com.epam.esm.entity.dto.CreateOrderDto;
 import com.epam.esm.entity.dto.CreateUserDto;
+import com.epam.esm.entity.dto.representation.OrderRepresentationDto;
+import com.epam.esm.entity.dto.representation.UserRepresentationDto;
 import com.epam.esm.repository.BankAccRepository;
 import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.OrderService;
@@ -56,36 +58,36 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public Page<User> findAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<UserRepresentationDto> findAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable).map(u -> modelMapper.map(u, UserRepresentationDto.class));
     }
 
     @Override
     @Transactional
-    public Optional<User> createUser(CreateUserDto newUser) {
-        Optional<User> createdUser = Optional.empty();
+    public Optional<UserRepresentationDto> createUser(CreateUserDto newUser) {
+        Optional<UserRepresentationDto> createdUser = Optional.empty();
         if (userValidator.validateUser(newUser)) {
             User user = modelMapper.map(newUser, User.class);
-            user.setMoneyAccount(BankAcc.builder().moneyAmount(0L).build());
+            user.setMoneyAccount(BankAcc.builder().moneyAmount(0L).user(user).build());
             user.setRoles(new HashSet<>(Collections.singleton(UserRole.CLIENT)));
             user.setCertificateOrders(new HashSet<>());
-            createdUser = Optional.of(userRepository.save(user));
+            createdUser = Optional.of(modelMapper.map(userRepository.save(user), UserRepresentationDto.class));
         }
         return createdUser;
     }
 
     @Override
     @Transactional
-    public Optional<CertificateOrder> makeOrder(CreateOrderDto order) {
+    public Optional<OrderRepresentationDto> makeOrder(CreateOrderDto order) {
         Optional<User> user = userRepository.findById(order.getBuyerId());
-        Optional<CertificateOrder> createdOrder = Optional.empty();
+        Optional<OrderRepresentationDto> createdOrder = Optional.empty();
         if (user.isPresent()) {
             long totalPrice = orderService.calculateTotalPrice(order.getOrderedCertificatesId());
             long userMoney = user.get().getMoneyAccount().getMoneyAmount();
             if (totalPrice <= userMoney) {
                 createdOrder = orderService.create(order);
                 if (createdOrder.isPresent()) {
-                    user.get().add(createdOrder.get());
+                    user.get().add(modelMapper.map(createdOrder.get(), CertificateOrder.class));
                     user.get().getMoneyAccount().setMoneyAmount(userMoney - totalPrice);
                     userRepository.save(user.get());
                 }
@@ -95,11 +97,15 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public Optional<User> findById(String id) {
-        Optional<User> searchedUser;
+    @Transactional
+    public Optional<UserRepresentationDto> findById(String id) {
+        Optional<UserRepresentationDto> searchedUser = Optional.empty();
         try {
             long userId = Long.parseLong(id);
-            searchedUser = userRepository.findById(userId);
+            Optional<User> user = userRepository.findById(userId);
+            if(user.isPresent()) {
+                searchedUser = Optional.of(modelMapper.map(user.get(), UserRepresentationDto.class));
+            }
         } catch (NumberFormatException e) {
             searchedUser = Optional.empty();
         }
