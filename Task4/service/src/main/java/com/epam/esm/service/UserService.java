@@ -18,7 +18,7 @@ public interface UserService extends UserDetailsService {
 
     Optional<UserRepresentationDto> createUser(CreateUserDto newUser);
 
-    Optional<OrderRepresentationDto> makeOrder(CreateOrderDto order);
+    Optional<OrderRepresentationDto> makeOrder(String username, CreateOrderDto order);
 
     Optional<UserRepresentationDto> findById(String id);
 }

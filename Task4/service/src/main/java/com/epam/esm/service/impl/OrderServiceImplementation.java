@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class OrderServiceImplementation implements OrderService {
     private OrderRepository orderRepository;
     private OrderValidator orderValidator;
@@ -49,17 +50,16 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    @Transactional
-    public Optional<OrderRepresentationDto> create(CreateOrderDto newOrder) {
+    public Optional<OrderRepresentationDto> create(User user, CreateOrderDto newOrder) {
         Optional<OrderRepresentationDto> createdOrder = Optional.empty();
         long totalPrice = calculateTotalPrice(newOrder.getOrderedCertificatesId());
         if (orderValidator.validateOrder(totalPrice)) {
-            CertificateOrder certificateOrder = modelMapper.map(newOrder, CertificateOrder.class);
-            User user = User.builder().id(newOrder.getBuyerId()).build();
+            CertificateOrder certificateOrder = new CertificateOrder();
             certificateOrder.setCertificates(createCertificatesFromId(newOrder.getOrderedCertificatesId()));
-            certificateOrder.setOwner(user);
             certificateOrder.setCreationTime(LocalDateTime.now());
             certificateOrder.setTotalPrice(totalPrice);
+            user.addOrder(certificateOrder);
+            certificateOrder.setOwner(user);
             createdOrder = Optional.of(modelMapper
                     .map(orderRepository.save(certificateOrder), OrderRepresentationDto.class));
         }
@@ -73,7 +73,6 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    @Transactional
     public Page<OrderRepresentationDto> findUserOrders(String userId, Pageable pageable) {
         Page<OrderRepresentationDto> orders;
         try {
@@ -88,7 +87,6 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    @Transactional
     public Optional<OrderRepresentationDto> findUserOrderById(String userId, String orderId) {
         Optional<OrderRepresentationDto> orderRepresentation = Optional.empty();
         try {
@@ -106,7 +104,6 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    @Transactional
     public List<OrderRepresentationDto> findMostExpensiveUserOrder(String userId) {
         List<OrderRepresentationDto> mostExpensiveOrder;
         try {

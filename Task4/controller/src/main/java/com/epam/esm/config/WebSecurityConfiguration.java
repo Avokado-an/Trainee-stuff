@@ -6,7 +6,6 @@ import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -21,7 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         prePostEnabled = true,
-        securedEnabled = true
+        securedEnabled = true,
+        jsr250Enabled = true
 )
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private UserService userService;
@@ -57,14 +57,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/certificates").permitAll()
-                .antMatchers(HttpMethod.POST, "/certificates").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.PUT, "/certificates").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/certificates").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.PUT, "/certificates/edit").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/tags").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/tags").hasAuthority("ADMIN")
+                .antMatchers("/auth/**", "/certificates").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

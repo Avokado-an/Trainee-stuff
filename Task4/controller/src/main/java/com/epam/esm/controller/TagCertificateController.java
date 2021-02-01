@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -30,6 +31,7 @@ public class TagCertificateController {
     }
 
     @GetMapping
+    @Secured({"ROLE_CLIENT", "ROLE_ADMIN"})
     public Page<TagRepresentationDto> showTags(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<TagRepresentationDto> tags = tagService.viewAll(pageable);
         manageTagLinks(tags, pageable);
@@ -37,11 +39,13 @@ public class TagCertificateController {
     }
 
     @DeleteMapping
+    @Secured("ROLE_ADMIN")
     public Set<TagRepresentationDto> deleteTag(@RequestBody IdDto idDto) {
         return tagService.delete(idDto.getId());
     }
 
     @PostMapping
+    @Secured("ROLE_ADMIN")
     public Optional<TagRepresentationDto> createTag(@RequestBody CreateTagDto tag) {
         return tagService.create(tag.getName());
     }

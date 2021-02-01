@@ -38,7 +38,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Set<CertificateOrder> certificateOrders;
 
-    public boolean add(CertificateOrder certificateOrder) {
+    public boolean addOrder(CertificateOrder certificateOrder) {
         return certificateOrders.add(certificateOrder);
     }
 

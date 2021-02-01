@@ -10,6 +10,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateOrderDto {
-    private Long buyerId;
     private List<Long> orderedCertificatesId;
 }

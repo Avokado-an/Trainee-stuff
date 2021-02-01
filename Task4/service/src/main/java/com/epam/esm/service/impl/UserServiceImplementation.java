@@ -22,9 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.Objects.nonNull;
+
 @Service
+@Transactional
 public class UserServiceImplementation implements UserService {
     private UserRepository userRepository;
     private OrderService orderService;
@@ -63,14 +67,13 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    @Transactional
     public Optional<UserRepresentationDto> createUser(CreateUserDto newUser) {
         Optional<UserRepresentationDto> createdUser = Optional.empty();
         if (userValidator.validateUser(newUser)) {
             User user = modelMapper.map(newUser, User.class);
             user.setPassword(encoder.encode(newUser.getPassword()));
             user.setMoneyAccount(BankAcc.builder().moneyAmount(0L).user(user).build());
-            user.setRoles(new HashSet<>(Collections.singleton(UserRole.CLIENT)));
+            user.setRoles(new HashSet<>(Collections.singleton(UserRole.ROLE_CLIENT)));
             user.setEnabled(true);
             user.setCertificateOrders(new HashSet<>());
             createdUser = Optional.of(modelMapper.map(userRepository.save(user), UserRepresentationDto.class));
@@ -79,19 +82,18 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    @Transactional
-    public Optional<OrderRepresentationDto> makeOrder(CreateOrderDto order) {
-        Optional<User> user = userRepository.findById(order.getBuyerId());
+    public Optional<OrderRepresentationDto> makeOrder(String username, CreateOrderDto order) {
         Optional<OrderRepresentationDto> createdOrder = Optional.empty();
-        if (user.isPresent()) {
-            long totalPrice = orderService.calculateTotalPrice(order.getOrderedCertificatesId());
-            long userMoney = user.get().getMoneyAccount().getMoneyAmount();
+        long totalPrice = orderService.calculateTotalPrice(order.getOrderedCertificatesId());
+        User user = userRepository.findByUsername(username);
+        if(nonNull(user)) {
+            long userMoney = user.getMoneyAccount().getMoneyAmount();
             if (totalPrice <= userMoney) {
-                createdOrder = orderService.create(order);
+                createdOrder = orderService.create(user, order);
                 if (createdOrder.isPresent()) {
-                    user.get().add(modelMapper.map(createdOrder.get(), CertificateOrder.class));
-                    user.get().getMoneyAccount().setMoneyAmount(userMoney - totalPrice);
-                    userRepository.save(user.get());
+                    user.addOrder(modelMapper.map(createdOrder.get(), CertificateOrder.class));
+                    user.getMoneyAccount().setMoneyAmount(userMoney - totalPrice);
+                    userRepository.save(user);
                 }
             }
         }
@@ -99,7 +101,6 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    @Transactional
     public Optional<UserRepresentationDto> findById(String id) {
         Optional<UserRepresentationDto> searchedUser = Optional.empty();
         try {

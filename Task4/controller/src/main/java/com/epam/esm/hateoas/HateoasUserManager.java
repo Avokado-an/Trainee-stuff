@@ -29,45 +29,45 @@ public class HateoasUserManager {
             Link selfLink = linkTo(methodOn(UserController.class)
                     .viewAllUsers(pageable)).withSelfRel();
             Link userLink = linkTo(methodOn(UserController.class)
-                    .viewUserById(user.getId().toString())).withRel(USER);
+                    .viewAnyUserById(user.getId().toString())).withRel(USER);
             Link userOrdersLink = linkTo(methodOn(UserController.class)
-                    .viewUserOrders(user.getId().toString(), pageable)).withRel(ORDERS);
+                    .viewAnyUserOrders(user.getId().toString(), pageable)).withRel(ORDERS);
             user.add(selfLink, userLink, userOrdersLink);
         }
     }
 
-    public static void manageUserLinks(Optional<UserRepresentationDto> user) {
+    public static void manageAnyUserLinks(Optional<UserRepresentationDto> user) {
         if (user.isPresent()) {
             Link usersLink = linkTo(methodOn(UserController.class)
                     .viewAllUsers(Pageable.unpaged())).withRel(USERS);
             Link selfLink = linkTo(methodOn(UserController.class)
-                    .viewUserById(user.get().getId().toString())).withSelfRel();
+                    .viewAnyUserById(user.get().getId().toString())).withSelfRel();
             Link userOrdersLink = linkTo(methodOn(UserController.class)
-                    .viewUserOrders(user.get().getId().toString(), Pageable.unpaged())).withRel(ORDERS);
+                    .viewAnyUserOrders(user.get().getId().toString(), Pageable.unpaged())).withRel(ORDERS);
             user.get().add(usersLink, selfLink, userOrdersLink);
         }
     }
 
-    public static void manageUserOrdersLinks(Page<OrderRepresentationDto> orders, String userId, Pageable pageable) {
+    public static void manageAnyUserOrdersLinks(Page<OrderRepresentationDto> orders, String userId, Pageable pageable) {
         for (OrderRepresentationDto order : orders) {
             Link selfLink = linkTo(methodOn(UserController.class)
-                    .viewUserOrders(userId, pageable)).withSelfRel();
+                    .viewAnyUserOrders(userId, pageable)).withSelfRel();
             Link userLink = linkTo(methodOn(UserController.class)
-                    .viewUserById(userId)).withRel(USER);
+                    .viewAnyUserById(userId)).withRel(USER);
             Link userOrderLink = linkTo(methodOn(UserController.class)
-                    .viewUserOrderById(userId, order.getId().toString())).withRel(ORDER);
+                    .viewAnyUserOrderById(userId, order.getId().toString())).withRel(ORDER);
             order.add(selfLink, userLink, userOrderLink);
         }
     }
 
-    public static void manageUserOrderLinks(Optional<OrderRepresentationDto> order, String userId) {
+    public static void manageAnyUserOrderLinks(Optional<OrderRepresentationDto> order, String userId) {
         if (order.isPresent()) {
             Link selfLink = linkTo(methodOn(UserController.class)
-                    .viewUserOrderById(userId, order.get().getId().toString())).withSelfRel();
+                    .viewAnyUserOrderById(userId, order.get().getId().toString())).withSelfRel();
             Link userLink = linkTo(methodOn(UserController.class)
-                    .viewUserById(userId)).withRel(USER);
+                    .viewAnyUserById(userId)).withRel(USER);
             Link userOrdersLink = linkTo(methodOn(UserController.class)
-                    .viewUserOrders(userId, Pageable.unpaged())).withRel(ORDERS);
+                    .viewAnyUserOrders(userId, Pageable.unpaged())).withRel(ORDERS);
             for (GiftCertificateRepresentationDto certificate : order.get().getCertificates()) {
                 Link certificateLink = linkTo(methodOn(GiftCertificateController.class)
                         .showCertificates(certificate.getId().toString())).withRel(CERTIFICATE);
