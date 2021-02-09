@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+import static java.util.Objects.isNull;
+
 @Component
 public class TagValidator {
     private static final String FORBIDDEN_CHARACTERS = "<>@#&";
@@ -16,8 +18,12 @@ public class TagValidator {
     }
 
     private boolean validateName(String tagName) {
-        boolean doesContainForbiddenCharacters = Arrays.stream(tagName.split("")).anyMatch(FORBIDDEN_CHARACTERS::contains);
-        return tagName.length() > MIN_LENGTH && tagName.length() < MAX_LENGTH
-                && !doesContainForbiddenCharacters;
+        boolean isValid = false;
+        if(!isNull(tagName)) {
+            boolean doesContainForbiddenCharacters = Arrays.stream(tagName.split("")).anyMatch(FORBIDDEN_CHARACTERS::contains);
+            isValid = tagName.length() > MIN_LENGTH && tagName.length() < MAX_LENGTH
+                    && !doesContainForbiddenCharacters;
+        }
+        return isValid;
     }
 }

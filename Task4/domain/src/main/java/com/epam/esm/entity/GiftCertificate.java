@@ -25,7 +25,8 @@ public class GiftCertificate {
             joinColumns = {@JoinColumn(name = "gift_certificate_id")},
             inverseJoinColumns = {@JoinColumn(name = "Utag_id")}
     )
-    @ToString.Exclude private Set<Tag> tags;
+    @ToString.Exclude
+    private Set<Tag> tags;
 
     @ManyToMany(mappedBy = "certificates", fetch = FetchType.LAZY)
     @JsonIgnore

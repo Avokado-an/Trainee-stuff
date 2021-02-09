@@ -5,6 +5,7 @@ import com.epam.esm.controller.UserController;
 import com.epam.esm.dto.representation.GiftCertificateRepresentationDto;
 import com.epam.esm.dto.representation.OrderRepresentationDto;
 import com.epam.esm.dto.representation.UserRepresentationDto;
+import com.epam.esm.exception.ResultNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
@@ -24,7 +25,8 @@ public class HateoasUserManager {
     private HateoasUserManager() {
     }
 
-    public static void manageAllUsersLinks(Page<UserRepresentationDto> users, Pageable pageable) {
+    public static void manageAllUsersLinks(Page<UserRepresentationDto> users, Pageable pageable)
+            throws ResultNotFoundException {
         for (UserRepresentationDto user : users) {
             Link selfLink = linkTo(methodOn(UserController.class)
                     .viewAllUsers(pageable)).withSelfRel();
@@ -36,19 +38,18 @@ public class HateoasUserManager {
         }
     }
 
-    public static void manageAnyUserLinks(Optional<UserRepresentationDto> user) {
-        if (user.isPresent()) {
+    public static void manageAnyUserLinks(UserRepresentationDto user) throws ResultNotFoundException {
             Link usersLink = linkTo(methodOn(UserController.class)
                     .viewAllUsers(Pageable.unpaged())).withRel(USERS);
             Link selfLink = linkTo(methodOn(UserController.class)
-                    .viewAnyUserById(user.get().getId().toString())).withSelfRel();
+                    .viewAnyUserById(user.getId().toString())).withSelfRel();
             Link userOrdersLink = linkTo(methodOn(UserController.class)
-                    .viewAnyUserOrders(user.get().getId().toString(), Pageable.unpaged())).withRel(ORDERS);
-            user.get().add(usersLink, selfLink, userOrdersLink);
-        }
+                    .viewAnyUserOrders(user.getId().toString(), Pageable.unpaged())).withRel(ORDERS);
+            user.add(usersLink, selfLink, userOrdersLink);
     }
 
-    public static void manageAnyUserOrdersLinks(Page<OrderRepresentationDto> orders, String userId, Pageable pageable) {
+    public static void manageAnyUserOrdersLinks(Page<OrderRepresentationDto> orders, String userId, Pageable pageable)
+            throws ResultNotFoundException {
         for (OrderRepresentationDto order : orders) {
             Link selfLink = linkTo(methodOn(UserController.class)
                     .viewAnyUserOrders(userId, pageable)).withSelfRel();
@@ -60,20 +61,18 @@ public class HateoasUserManager {
         }
     }
 
-    public static void manageAnyUserOrderLinks(Optional<OrderRepresentationDto> order, String userId) {
-        if (order.isPresent()) {
+    public static void manageAnyUserOrderLinks(OrderRepresentationDto order, String userId) throws ResultNotFoundException {
             Link selfLink = linkTo(methodOn(UserController.class)
-                    .viewAnyUserOrderById(userId, order.get().getId().toString())).withSelfRel();
+                    .viewAnyUserOrderById(userId, order.getId().toString())).withSelfRel();
             Link userLink = linkTo(methodOn(UserController.class)
                     .viewAnyUserById(userId)).withRel(USER);
             Link userOrdersLink = linkTo(methodOn(UserController.class)
                     .viewAnyUserOrders(userId, Pageable.unpaged())).withRel(ORDERS);
-            for (GiftCertificateRepresentationDto certificate : order.get().getCertificates()) {
+            for (GiftCertificateRepresentationDto certificate : order.getCertificates()) {
                 Link certificateLink = linkTo(methodOn(GiftCertificateController.class)
                         .showCertificates(certificate.getId().toString())).withRel(CERTIFICATE);
                 certificate.add(certificateLink);
-            }
-            order.get().add(selfLink, userLink, userOrdersLink);
+            order.add(selfLink, userLink, userOrdersLink);
         }
     }
 }

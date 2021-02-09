@@ -1,11 +1,12 @@
 package com.epam.esm.service;
 
-import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.dto.CertificateFilterDto;
 import com.epam.esm.dto.CreateGiftCertificateDto;
 import com.epam.esm.dto.UpdateGiftCertificateDto;
 import com.epam.esm.dto.UpdateGiftCertificateFieldDto;
 import com.epam.esm.dto.representation.GiftCertificateRepresentationDto;
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.exception.ResultNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,9 +15,9 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface GiftCertificateService {
-    Optional<GiftCertificateRepresentationDto> create(CreateGiftCertificateDto giftCertificate);
+    GiftCertificateRepresentationDto create(CreateGiftCertificateDto giftCertificate);
 
-    Optional<GiftCertificateRepresentationDto> findById(String id);
+    GiftCertificateRepresentationDto findById(String id) throws ResultNotFoundException;
 
     Page<GiftCertificateRepresentationDto> findAll(Pageable pageable);
 

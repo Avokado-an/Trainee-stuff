@@ -5,6 +5,7 @@ import com.epam.esm.dto.CreateUserDto;
 import com.epam.esm.dto.representation.OrderRepresentationDto;
 import com.epam.esm.dto.representation.UserRepresentationDto;
 import com.epam.esm.entity.User;
+import com.epam.esm.exception.ResultNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,7 +19,7 @@ public interface UserService extends UserDetailsService {
 
     Optional<UserRepresentationDto> createUser(CreateUserDto newUser);
 
-    Optional<OrderRepresentationDto> makeOrder(String username, CreateOrderDto order);
+    OrderRepresentationDto makeOrder(String username, CreateOrderDto order);
 
-    Optional<UserRepresentationDto> findById(String id);
+    UserRepresentationDto findById(String id) throws ResultNotFoundException;
 }

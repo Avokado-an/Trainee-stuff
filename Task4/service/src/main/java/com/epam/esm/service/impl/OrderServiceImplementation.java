@@ -1,10 +1,13 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.dto.representation.GiftCertificateRepresentationDto;
+import com.epam.esm.dto.status.OrderOperationStatus;
 import com.epam.esm.entity.CertificateOrder;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.User;
 import com.epam.esm.dto.CreateOrderDto;
 import com.epam.esm.dto.representation.OrderRepresentationDto;
+import com.epam.esm.exception.ResultNotFoundException;
 import com.epam.esm.repository.OrderRepository;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.validator.OrderValidator;
@@ -18,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -50,18 +54,14 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    public Optional<OrderRepresentationDto> create(User user, CreateOrderDto newOrder) {
-        Optional<OrderRepresentationDto> createdOrder = Optional.empty();
+    public OrderRepresentationDto create(User user, CreateOrderDto newOrder) {
+        OrderRepresentationDto createdOrder;
         long totalPrice = calculateTotalPrice(newOrder.getOrderedCertificatesId());
-        if (orderValidator.validateOrder(totalPrice)) {
-            CertificateOrder certificateOrder = new CertificateOrder();
-            certificateOrder.setCertificates(createCertificatesFromId(newOrder.getOrderedCertificatesId()));
-            certificateOrder.setCreationTime(LocalDateTime.now());
-            certificateOrder.setTotalPrice(totalPrice);
-            user.addOrder(certificateOrder);
-            certificateOrder.setOwner(user);
-            createdOrder = Optional.of(modelMapper
-                    .map(orderRepository.save(certificateOrder), OrderRepresentationDto.class));
+        if (orderValidator.validateOrder(totalPrice) && doAllCertificatesExist(newOrder.getOrderedCertificatesId())) {
+            createdOrder = createOrder(newOrder, totalPrice, user);
+            createdOrder.setStatus(OrderOperationStatus.CREATED);
+        } else {
+            createdOrder = processInvalidOrder(newOrder, totalPrice);
         }
         return createdOrder;
     }
@@ -69,7 +69,7 @@ public class OrderServiceImplementation implements OrderService {
     @Override
     public long calculateTotalPrice(List<Long> certificatesId) {
         List<GiftCertificate> certificates = certificateService.findIdsCertificates(certificatesId);
-        return certificates.stream().map(GiftCertificate::getPrice).reduce(0L, Long::sum);
+        return certificates.stream().filter(o -> !Objects.isNull(o)).map(GiftCertificate::getPrice).reduce(0L, Long::sum);
     }
 
     @Override
@@ -87,18 +87,21 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    public Optional<OrderRepresentationDto> findUserOrderById(String userId, String orderId) {
-        Optional<OrderRepresentationDto> orderRepresentation = Optional.empty();
+    public OrderRepresentationDto findUserOrderById(String userId, String orderId) throws ResultNotFoundException {
+        OrderRepresentationDto orderRepresentation;
         try {
             Long userIdValue = Long.parseLong(userId);
             long orderIdValue = Long.parseLong(orderId);
             User user = User.builder().id(userIdValue).build();
             Optional<CertificateOrder> order = orderRepository.findByIdAndOwner(orderIdValue, user);
-            if (order.isPresent()) {
-                orderRepresentation = Optional.of(modelMapper.map(order.get(), OrderRepresentationDto.class));
+            if(order.isPresent()) {
+                orderRepresentation = order.map(certificateOrder ->
+                        modelMapper.map(certificateOrder, OrderRepresentationDto.class)).get();
+            } else {
+                throw new ResultNotFoundException("Order was not found");
             }
         } catch (NumberFormatException e) {
-            orderRepresentation = Optional.empty();
+            throw new ResultNotFoundException("Invalid id of user or certificate (should contain only numbers");
         }
         return orderRepresentation;
     }
@@ -116,7 +119,49 @@ public class OrderServiceImplementation implements OrderService {
         return mostExpensiveOrder;
     }
 
+    @Override
+    public OrderRepresentationDto createOrderInstance(CreateOrderDto newOrder) {
+        OrderRepresentationDto order = new OrderRepresentationDto();
+        order.setCertificates(createCertificatesFromId(newOrder.getOrderedCertificatesId()).stream().map(o ->
+                modelMapper.map(o, GiftCertificateRepresentationDto.class)).collect(Collectors.toList()));
+        order.setTotalPrice(calculateTotalPrice(newOrder.getOrderedCertificatesId()));
+        return order;
+    }
+
     private List<GiftCertificate> createCertificatesFromId(List<Long> ids) {
         return ids.stream().map(i -> GiftCertificate.builder().id(i).build()).collect(Collectors.toList());
+    }
+
+    private boolean doAllCertificatesExist(List<Long> ids) {
+        for(Long id : ids) {
+            try {
+                certificateService.findById(id.toString());
+            } catch (ResultNotFoundException e){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private OrderRepresentationDto createOrder(CreateOrderDto newOrder, long totalPrice, User user) {
+        CertificateOrder certificateOrder = new CertificateOrder();
+        certificateOrder.setCertificates(createCertificatesFromId(newOrder.getOrderedCertificatesId()));
+        certificateOrder.setCreationTime(LocalDateTime.now());
+        certificateOrder.setTotalPrice(totalPrice);
+        user.addOrder(certificateOrder);
+        certificateOrder.setOwner(user);
+        return modelMapper.map(orderRepository.save(certificateOrder), OrderRepresentationDto.class);
+    }
+
+    private OrderRepresentationDto processInvalidOrder(CreateOrderDto newOrder, long totalPrice) {
+        OrderRepresentationDto createdOrder = createOrderInstance(newOrder);
+        if(!orderValidator.validateOrder(totalPrice)) {
+            createdOrder.setStatus(OrderOperationStatus.TOTAL_PRICE_LARGER_THAN_10000);
+        } else if(!doAllCertificatesExist(newOrder.getOrderedCertificatesId())) {
+            createdOrder.setStatus(OrderOperationStatus.CERTIFICATES_ID_NOT_FOUND);
+        } else {
+            createdOrder.setStatus(OrderOperationStatus.CERTIFICATES_NOT_FOUND_AND_PRICE_LARGER_THAN_10000);
+        }
+        return createdOrder;
     }
 }

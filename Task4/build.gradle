@@ -1,5 +1,12 @@
 plugins {
     id 'java'
+    id 'java-library'
+}
+
+task singleJar(type: Jar) {
+    baseName = 'app-jar'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
 group 'org.example'

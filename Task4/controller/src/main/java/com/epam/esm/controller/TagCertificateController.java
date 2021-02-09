@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 import java.util.Set;
 
@@ -46,7 +47,7 @@ public class TagCertificateController {
 
     @PostMapping
     @Secured("ROLE_ADMIN")
-    public Optional<TagRepresentationDto> createTag(@RequestBody CreateTagDto tag) {
+    public TagRepresentationDto createTag(@Valid @RequestBody CreateTagDto tag) {
         return tagService.create(tag.getName());
     }
 

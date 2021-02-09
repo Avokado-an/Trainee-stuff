@@ -6,6 +6,7 @@ import com.epam.esm.dto.representation.UserRepresentationDto;
 import com.epam.esm.entity.User;
 import com.epam.esm.error.ErrorCode;
 import com.epam.esm.error.ErrorHandler;
+import com.epam.esm.exception.ResultNotFoundException;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.UserService;
@@ -21,7 +22,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.epam.esm.hateoas.HateoasUserManager.*;
 
@@ -56,7 +56,7 @@ public class UserController {
     @GetMapping
     @Secured("ROLE_ADMIN")
     public Page<UserRepresentationDto> viewAllUsers(
-            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) throws ResultNotFoundException {
         Page<UserRepresentationDto> users = userService.findAllUsers(pageable);
         manageAllUsersLinks(users, pageable);
         return users;
@@ -65,7 +65,7 @@ public class UserController {
     @GetMapping("/current")
     @Secured({"ROLE_ADMIN", "ROLE_CLIENT"})
     public Page<UserRepresentationDto> viewCurrentUser(
-            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) throws ResultNotFoundException {
         Page<UserRepresentationDto> users = userService.findAllUsers(pageable);
         manageAllUsersLinks(users, pageable);
         return users;
@@ -73,8 +73,9 @@ public class UserController {
 
     @GetMapping("/{userId}")
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Optional<UserRepresentationDto>> viewAnyUserById(@PathVariable String userId) {
-        Optional<UserRepresentationDto> user = userService.findById(userId);
+    public ResponseEntity<UserRepresentationDto> viewAnyUserById(@PathVariable String userId)
+            throws ResultNotFoundException {
+        UserRepresentationDto user = userService.findById(userId);
         manageAnyUserLinks(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -82,42 +83,42 @@ public class UserController {
     @GetMapping("/{userId}/orders")
     @Secured("ROLE_ADMIN")
     public Page<OrderRepresentationDto> viewAnyUserOrders(@PathVariable String userId, @PageableDefault(
-            sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+            sort = "id", direction = Sort.Direction.DESC) Pageable pageable) throws ResultNotFoundException {
         Page<OrderRepresentationDto> orders = orderService.findUserOrders(userId, pageable);
         manageAnyUserOrdersLinks(orders, userId, pageable);
         return orders;
     }
 
-    @GetMapping("/current/orders")
+    @GetMapping("/orders")
     @Secured({"ROLE_ADMIN", "ROLE_CLIENT"})
     public Page<OrderRepresentationDto> viewCurrentUserOrders(@PageableDefault(
-            sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+            sort = "id", direction = Sort.Direction.DESC) Pageable pageable) throws ResultNotFoundException {
         User user = principalDefiner.getPrincipal();
         Page<OrderRepresentationDto> orders = orderService.findUserOrders(user.getId().toString(), pageable);
         manageAnyUserOrdersLinks(orders, user.getId().toString(), pageable);
         return orders;
     }
 
-    @PostMapping("{userId}/orders/popular_tag")
+    @PostMapping("{userId}/orders/popular-tag")
     @Secured("ROLE_ADMIN")
     public List<TagRepresentationDto> viewAnyUserMostUsedTag(@PathVariable String userId) {
         return tagService.findMostUsedUserTag(userId);
     }
 
-    @PostMapping("{userId}/orders/max_price")
+    @PostMapping("{userId}/orders/max-price")
     @Secured("ROLE_ADMIN")
     public List<OrderRepresentationDto> viewAnyUserMostExpensiveOrder(@PathVariable String userId) {
         return orderService.findMostExpensiveUserOrder(userId);
     }
 
-    @PostMapping("current/orders/popular_tag")
+    @PostMapping("/orders/popular-tag")
     @Secured("ROLE_ADMIN")
     public List<TagRepresentationDto> viewCurrentUserMostUsedTag() {
         User user = principalDefiner.getPrincipal();
         return tagService.findMostUsedUserTag(user.getId().toString());
     }
 
-    @PostMapping("current/orders/max_price")
+    @PostMapping("/orders/max-price")
     @Secured("ROLE_ADMIN")
     public List<OrderRepresentationDto> viewCurrentUserMostExpensiveOrder() {
         User user = principalDefiner.getPrincipal();
@@ -126,18 +127,19 @@ public class UserController {
 
     @GetMapping("/{userId}/orders/{orderId}")
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Optional<OrderRepresentationDto>> viewAnyUserOrderById(
-            @PathVariable String userId, @PathVariable String orderId) {
-        Optional<OrderRepresentationDto> order = orderService.findUserOrderById(userId, orderId);
+    public ResponseEntity<OrderRepresentationDto> viewAnyUserOrderById(
+            @PathVariable String userId, @PathVariable String orderId) throws ResultNotFoundException {
+        OrderRepresentationDto order = orderService.findUserOrderById(userId, orderId);
         manageAnyUserOrderLinks(order, userId);
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
-    @GetMapping("/current/orders/{orderId}")
+    @GetMapping("/orders/{orderId}")
     @Secured({"ROLE_CLIENT", "ROLE_ADMIN"})
-    public ResponseEntity<Optional<OrderRepresentationDto>> viewCURRENTUserOrderById(@PathVariable String orderId) {
+    public ResponseEntity<OrderRepresentationDto> viewCURRENTUserOrderById(@PathVariable String orderId)
+            throws ResultNotFoundException {
         String userId = principalDefiner.getPrincipal().getId().toString();
-        Optional<OrderRepresentationDto> order = orderService.findUserOrderById(userId, orderId);
+        OrderRepresentationDto order = orderService.findUserOrderById(userId, orderId);
         manageAnyUserOrderLinks(order, userId);
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
@@ -145,6 +147,12 @@ public class UserController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorHandler handleResourceNotFoundException(Exception exception) {
+        return new ErrorHandler(exception.getMessage(), ErrorCode.RESOURCE_NOT_FOUND.getErrorCode());
+    }
+
+    @ExceptionHandler({ResultNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorHandler handleResourceNotFoundException(ResultNotFoundException exception) {
         return new ErrorHandler(exception.getMessage(), ErrorCode.RESOURCE_NOT_FOUND.getErrorCode());
     }
 }

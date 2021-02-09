@@ -4,14 +4,15 @@ import com.epam.esm.dto.CreateOrderDto;
 import com.epam.esm.dto.CreateUserDto;
 import com.epam.esm.dto.representation.OrderRepresentationDto;
 import com.epam.esm.dto.representation.UserRepresentationDto;
+import com.epam.esm.dto.status.OrderOperationStatus;
 import com.epam.esm.entity.BankAcc;
 import com.epam.esm.entity.CertificateOrder;
 import com.epam.esm.entity.User;
 import com.epam.esm.entity.UserRole;
+import com.epam.esm.exception.ResultNotFoundException;
 import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.UserService;
-import com.epam.esm.validator.UserValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,9 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -32,7 +33,6 @@ import static java.util.Objects.nonNull;
 public class UserServiceImplementation implements UserService {
     private UserRepository userRepository;
     private OrderService orderService;
-    private UserValidator userValidator;
     private ModelMapper modelMapper;
     private PasswordEncoder encoder;
 
@@ -52,11 +52,6 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Autowired
-    public void setUserValidator(UserValidator userValidator) {
-        this.userValidator = userValidator;
-    }
-
-    @Autowired
     public void setEncoder(PasswordEncoder encoder) {
         this.encoder = encoder;
     }
@@ -68,8 +63,8 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public Optional<UserRepresentationDto> createUser(CreateUserDto newUser) {
-        Optional<UserRepresentationDto> createdUser = Optional.empty();
-        if (userValidator.validateUser(newUser)) {
+        Optional<UserRepresentationDto> createdUser;
+        if (isUsernameFree(newUser.getUsername())) {
             User user = modelMapper.map(newUser, User.class);
             user.setPassword(encoder.encode(newUser.getPassword()));
             user.setMoneyAccount(BankAcc.builder().moneyAmount(0L).user(user).build());
@@ -77,40 +72,39 @@ public class UserServiceImplementation implements UserService {
             user.setEnabled(true);
             user.setCertificateOrders(new HashSet<>());
             createdUser = Optional.of(modelMapper.map(userRepository.save(user), UserRepresentationDto.class));
+            createdUser.get().setOperationStatus("User was created");
+        } else {
+            createdUser = Optional.of(modelMapper.map(newUser, UserRepresentationDto.class));
+            createdUser.get().setOperationStatus("Username is taken");
         }
         return createdUser;
     }
 
     @Override
-    public Optional<OrderRepresentationDto> makeOrder(String username, CreateOrderDto order) {
-        Optional<OrderRepresentationDto> createdOrder = Optional.empty();
-        long totalPrice = orderService.calculateTotalPrice(order.getOrderedCertificatesId());
+    public OrderRepresentationDto makeOrder(String username, CreateOrderDto order) {
+        OrderRepresentationDto createdOrder = orderService.createOrderInstance(order);
         User user = userRepository.findByUsername(username);
-        if(nonNull(user)) {
-            long userMoney = user.getMoneyAccount().getMoneyAmount();
-            if (totalPrice <= userMoney) {
-                createdOrder = orderService.create(user, order);
-                if (createdOrder.isPresent()) {
-                    user.addOrder(modelMapper.map(createdOrder.get(), CertificateOrder.class));
-                    user.getMoneyAccount().setMoneyAmount(userMoney - totalPrice);
-                    userRepository.save(user);
-                }
-            }
+        if (nonNull(user)) {
+            createdOrder = processOrder(user, order);
+        } else {
+            createdOrder.setStatus(OrderOperationStatus.INVALID_USER_INFO);
         }
         return createdOrder;
     }
 
     @Override
-    public Optional<UserRepresentationDto> findById(String id) {
-        Optional<UserRepresentationDto> searchedUser = Optional.empty();
+    public UserRepresentationDto findById(String id) throws ResultNotFoundException {
+        UserRepresentationDto searchedUser;
         try {
             long userId = Long.parseLong(id);
             Optional<User> user = userRepository.findById(userId);
             if (user.isPresent()) {
-                searchedUser = Optional.of(modelMapper.map(user.get(), UserRepresentationDto.class));
+                searchedUser = modelMapper.map(user.get(), UserRepresentationDto.class);
+            } else {
+                throw new ResultNotFoundException("User was not found");
             }
         } catch (NumberFormatException e) {
-            searchedUser = Optional.empty();
+            throw new ResultNotFoundException("Invalid id (should contain only numbers)");
         }
         return searchedUser;
     }
@@ -118,5 +112,25 @@ public class UserServiceImplementation implements UserService {
     @Override
     public User loadUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    private boolean isUsernameFree(String username) {
+        return isNull(userRepository.findByUsername(username));
+    }
+
+    private OrderRepresentationDto processOrder(User user, CreateOrderDto order) {
+        OrderRepresentationDto createdOrder = orderService.createOrderInstance(order);
+        long totalPrice = orderService.calculateTotalPrice(order.getOrderedCertificatesId());
+        long userMoney = user.getMoneyAccount().getMoneyAmount();
+        if (totalPrice <= userMoney) {
+            createdOrder = orderService.create(user, order);
+            if (createdOrder.getStatus().equals(OrderOperationStatus.CREATED))
+                user.addOrder(modelMapper.map(createdOrder, CertificateOrder.class));
+            user.getMoneyAccount().setMoneyAmount(userMoney - totalPrice);
+            userRepository.save(user);
+        } else {
+            createdOrder.setStatus(OrderOperationStatus.NOT_ENOUGH_MONEY);
+        }
+        return createdOrder;
     }
 }

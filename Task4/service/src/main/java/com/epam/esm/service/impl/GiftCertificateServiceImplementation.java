@@ -1,12 +1,13 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.dto.CertificateFilterDto;
 import com.epam.esm.dto.CreateGiftCertificateDto;
 import com.epam.esm.dto.UpdateGiftCertificateDto;
 import com.epam.esm.dto.UpdateGiftCertificateFieldDto;
 import com.epam.esm.dto.representation.GiftCertificateRepresentationDto;
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.ResultNotFoundException;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.repository.type.SearchType;
@@ -30,13 +31,18 @@ import java.util.stream.Collectors;
 @Service
 public class GiftCertificateServiceImplementation implements GiftCertificateService {
     private GiftCertificateRepository giftCertificateRepository;
-    private GiftCertificateValidator giftCertificateValidator;
     private TagRepository tagRepository;
+    private GiftCertificateValidator certificateValidator;
     private ModelMapper modelMapper;
 
     @Autowired
     public void setGiftCertificateRepository(GiftCertificateRepository giftCertificateRepository) {
         this.giftCertificateRepository = giftCertificateRepository;
+    }
+
+    @Autowired
+    public void setCertificateValidator(GiftCertificateValidator certificateValidator) {
+        this.certificateValidator = certificateValidator;
     }
 
     @Autowired
@@ -49,40 +55,35 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
         this.tagRepository = tagRepository;
     }
 
-    @Autowired
-    public void setGiftCertificateValidator(GiftCertificateValidator giftCertificateValidator) {
-        this.giftCertificateValidator = giftCertificateValidator;
-    }
-
     @Override
     @Transactional
-    public Optional<GiftCertificateRepresentationDto> create(CreateGiftCertificateDto giftCertificate) {
+    public GiftCertificateRepresentationDto create(CreateGiftCertificateDto giftCertificate) {
         GiftCertificate certificate = modelMapper.map(giftCertificate, GiftCertificate.class);
-        Optional<GiftCertificateRepresentationDto> representationCertificate = Optional.empty();
-        if (giftCertificateValidator.validateCertificate(certificate)) {
-            certificate.setCreationDate(LocalDateTime.now());
-            certificate.setLastUpdateDate(LocalDateTime.now());
-            certificate.setTags(createCertificateTags(certificate));
-            giftCertificateRepository.save(certificate);
-            representationCertificate = Optional.of(modelMapper.map(certificate, GiftCertificateRepresentationDto.class));
-        }
+        GiftCertificateRepresentationDto representationCertificate;
+        certificate.setCreationDate(LocalDateTime.now());
+        certificate.setLastUpdateDate(LocalDateTime.now());
+        certificate.setTags(createCertificateTags(certificate));
+        giftCertificateRepository.save(certificate);
+        representationCertificate = modelMapper.map(certificate, GiftCertificateRepresentationDto.class);
         return representationCertificate;
     }
 
     @Override
     @Transactional
-    public Optional<GiftCertificateRepresentationDto> findById(String id) {
+    public GiftCertificateRepresentationDto findById(String id) throws ResultNotFoundException {
         Optional<GiftCertificate> certificateToFind;
-        Optional<GiftCertificateRepresentationDto> representationCertificate = Optional.empty();
+        GiftCertificateRepresentationDto representationCertificate;
         try {
             Long certificateId = Long.parseLong(id);
             certificateToFind = giftCertificateRepository.findById(certificateId);
             if (certificateToFind.isPresent()) {
-                representationCertificate = Optional.of(
-                        modelMapper.map(certificateToFind.get(), GiftCertificateRepresentationDto.class));
+                representationCertificate = certificateToFind
+                        .map(certificate -> modelMapper.map(certificate, GiftCertificateRepresentationDto.class)).get();
+            } else {
+                throw new ResultNotFoundException("No certificate with this id was found");
             }
         } catch (NumberFormatException ignored) {
-
+            throw new ResultNotFoundException("Invalid id value (should not contain anything but numbers)");
         }
         return representationCertificate;
     }
@@ -99,7 +100,7 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
     public Optional<GiftCertificateRepresentationDto> update(UpdateGiftCertificateDto updatedCertificate) {
         Optional<GiftCertificate> certificate = giftCertificateRepository.findById(updatedCertificate.getId());
         Optional<GiftCertificateRepresentationDto> certificateRepresentation = Optional.empty();
-        if (certificate.isPresent() && giftCertificateValidator.validateCertificate(certificate.get())) {
+        if (certificate.isPresent()) {
             certificate = Optional.of(modelMapper.map(updatedCertificate, GiftCertificate.class));
             certificate.get().setLastUpdateDate(LocalDateTime.now());
             Set<Tag> certificateTagsFromDb = updateCertificateTags(updatedCertificate.getTags());
@@ -130,9 +131,9 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
             if (wasUpdated) {
                 certificate.get().setLastUpdateDate(LocalDateTime.now());
                 giftCertificateRepository.save(certificate.get());
-                certificateRepresentation = Optional.of(modelMapper
-                        .map(certificate.get(), GiftCertificateRepresentationDto.class));
             }
+            certificateRepresentation = Optional.of(modelMapper
+                    .map(certificate.get(), GiftCertificateRepresentationDto.class));
         }
         return certificateRepresentation;
     }
@@ -173,7 +174,7 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
                                     .getValueMapper()
                                     .apply(updatedField.getEditedValue()),
                             certificate);
-            wasUpdated = giftCertificateValidator.validateCertificate(certificate);
+            wasUpdated = certificateValidator.validateCertificate(certificate);
         } catch (NumberFormatException e) {
             wasUpdated = false;
         }
@@ -181,7 +182,7 @@ public class GiftCertificateServiceImplementation implements GiftCertificateServ
     }
 
     private Optional<Specification<GiftCertificate>> defineSpecification(
-            List<SearchType> searchTypes, List<String> tagNames, String name) { //todo split this method into parts
+            List<SearchType> searchTypes, List<String> tagNames, String name) {
         Optional<Specification<GiftCertificate>> currentSpecification = Optional.empty();
         Optional<Specification<GiftCertificate>> tagSpecification;
         if (searchTypes.contains(SearchType.SEARCH_BY_NAME_OR_DESCRIPTION_BEGINNING)

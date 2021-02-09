@@ -11,6 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import static java.util.Objects.isNull;
+
 @Service
 public class SecurityServiceImplementation implements SecurityService {
     private AuthenticationManager authenticationManager;
@@ -33,7 +35,7 @@ public class SecurityServiceImplementation implements SecurityService {
             String password = loginDto.getPassword();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             User user = userService.loadUserByUsername(username);
-            if (user == null) {
+            if (isNull(user)) {
                 throw new UsernameNotFoundException("user not found");
             }
             return user;

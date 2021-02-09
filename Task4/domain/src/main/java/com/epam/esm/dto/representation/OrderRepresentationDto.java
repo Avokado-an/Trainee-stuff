@@ -1,5 +1,6 @@
 package com.epam.esm.dto.representation;
 
+import com.epam.esm.dto.status.OrderOperationStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,4 +17,5 @@ public class OrderRepresentationDto extends RepresentationModel<OrderRepresentat
     private List<GiftCertificateRepresentationDto> certificates;
     private LocalDateTime creationTime;
     private Long totalPrice;
+    private OrderOperationStatus status;
 }

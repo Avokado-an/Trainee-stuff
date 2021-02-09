@@ -19,4 +19,5 @@ public class UserRepresentationDto extends RepresentationModel<OrderRepresentati
     private LocalDateTime birthDay;
     private Set<UserRole> roles;
     private BankAcc moneyAccount;
+    private String operationStatus;
 }
