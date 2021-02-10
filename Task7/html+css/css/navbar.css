@@ -1,0 +1,32 @@
+.navbar {
+    display: inline;
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-form {
+    text-indent: 20px;
+    border-style: solid;
+    border-width: 1px;
+    border-color:rgb(182, 177, 177);
+    width: 400px;
+    height: 35px;
+}
+
+.select-form {
+    text-align-last: center;
+    margin-left: -5px;
+    border-width: 1px;
+    border-color: rgb(182, 177, 177);
+    width: 200px;
+    height: 38px;
+}
+
+.navbar-item {
+    margin-left: 15px;
+    display: inline-block;
+}
+
+.nav-item-img {
+    vertical-align:middle
+}

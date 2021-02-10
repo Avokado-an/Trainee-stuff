@@ -1,0 +1,67 @@
+.white-text {
+    color: white;
+}
+
+.footer {
+    height: 100px;
+}
+
+.m-top-20 {
+    margin-top: 20px;
+}
+
+.m-top-130 {
+    margin-top: 130px;
+}
+
+.m-bot-15 {
+    margin-bottom: 15px;
+}
+
+.m-left-15 {
+    margin-left: 15px;
+}
+
+.m-left-25 {
+    margin-left: 25px;
+}
+
+.m-left-20 {
+    margin-left: 20px;
+}
+
+.font-30 {
+    font-size: 30px;
+}
+
+.font-20 {
+    font-size: 20px;
+}
+
+.m-top-15 {
+    margin-top: 15px;
+}
+
+.m-top-10 {
+    margin-top: 10px;
+}
+
+.m-top-30 {
+    margin-top: 30px;
+}
+
+.light-grey-text {
+    color: rgb(163, 163, 163);
+}
+
+.bg-light-green {
+    background-color:rgb(129, 204, 129);
+}
+
+.solid-text {
+    font-weight: 600;
+}
+
+.bg-white {
+    background-color: white;
+}
