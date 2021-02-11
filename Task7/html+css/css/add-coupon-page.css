@@ -1,0 +1,77 @@
+.coupon-line {
+    width: 100%;
+    background-color: rgb(211, 211, 211);
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.coupon-left-part-form {
+    margin-top: 20px;
+    margin-left: 170px;
+    float: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.coupon-right-part-form {
+    display: flex;
+    margin-top: 20px;
+    margin-right: 170px;
+    float: right;
+    flex-direction: column;
+}
+
+.add-coupon-input-form {
+    display: flex;
+    justify-content: space-around;
+}
+
+.description-input {
+    border: solid;
+    border-width: 1px;
+    border-color: rgb(209, 209, 209);
+    background-color: rgb(233, 233, 233);
+    width: 400px;
+    height: 122px;
+}
+
+.coupon-input {
+    border: solid;
+    background-color: rgb(233, 233, 233);
+    border-width: 1px;
+    border-color: rgb(209, 209, 209);
+    width: 400px;
+    height: 40px;
+}
+
+.select-category {
+    background-color: rgb(233, 233, 233);
+    border-width: 1px;
+    border-color: rgb(182, 177, 177);
+    width: 406px;
+    height: 40px;
+}
+
+.coupon-upload-file {
+    border: solid;
+    background-color: rgb(233, 233, 233);
+    border-width: 1px;
+    border-color: rgb(209, 209, 209);
+    width: 400px;
+    height: 40px;
+}
+
+.coupon-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.coupon-button {
+    width: 190px;
+    height: 40px;
+    border: solid;
+    border-width: 1px;
+    border-color: rgb(209, 209, 209);
+}

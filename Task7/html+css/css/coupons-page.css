@@ -1,0 +1,74 @@
+.categories-line {
+    width: 100%;
+    background-color: rgb(214, 214, 214);
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.category-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 100px;
+}
+
+.coupons-row {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+}
+
+.category {
+    width: 50px;
+    height: 50px;
+    background-color: white;
+}
+
+.category-name {
+    color: rgb(163, 163, 163);
+    margin-top: 5px;
+}
+
+.coupon-cards {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 100%;
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+}
+
+.coupon-card {
+    height: 250px;
+    width: 180px;
+    margin-left: 40px;
+}
+
+.coupon-picture {
+    background-color: rgb(214, 214, 214);
+    height: 150px;
+    width: 180px;
+}
+
+.left-coupon-part {
+    float: left;
+    margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.right-coupon-part {
+    float: right;
+    margin-right: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.coupon-button {
+    width: 50px;
+    height: 30px;
+}
