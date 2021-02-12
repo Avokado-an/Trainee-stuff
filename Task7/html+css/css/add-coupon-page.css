@@ -3,7 +3,6 @@
     background-color: rgb(211, 211, 211);
     height: 60px;
     display: flex;
-    justify-content: center;
     align-items: center;
 }
 
@@ -61,6 +60,8 @@
     border-color: rgb(209, 209, 209);
     width: 400px;
     height: 40px;
+    display: flex;
+    align-items: center;
 }
 
 .coupon-buttons {

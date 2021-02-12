@@ -9,6 +9,7 @@
 </head>
 
 <body>
+
     <div class="navbar">
         <div>
             <div class="navbar-item nav-item-img">
@@ -49,7 +50,7 @@
 
     <div class="page-body-not-centered">
         <div class="coupon-line">
-            <div class="white-text">Add new Coupon</div>
+            <div class="white-text solid-text font-20 m-left-260">Add new Coupon</div>
         </div>
         <div class="add-coupon-input-form">
             <div class="coupon-left-part-form">
@@ -66,8 +67,14 @@
                 <input class="coupon-input m-top-10" type="date" value="" name="date">
                 <label class="m-top-10 light-grey-text" for="price">Price</label>
                 <input class="coupon-input m-top-10" type="number" name="price">
-                <label class="m-top-10 light-grey-text" for="images">Images</label>
-                <input class="coupon-upload-file m-top-10" type="file" name="images">
+                <label class="m-top-10 light-grey-text" for="upload">Images</label>
+                <label for="upload" class="coupon-upload-file m-top-10" type="text">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                    </svg>
+                </label>
+                <input type="file" id="upload" class="hidden">
             </div>
             <div class="coupon-right-part-form">
                 <label class="m-top-10 light-grey-text" for="item">Iten name</label>

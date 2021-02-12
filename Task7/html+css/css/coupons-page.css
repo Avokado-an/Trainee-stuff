@@ -17,6 +17,7 @@
 
 .coupons-row {
     margin-top: 30px;
+    margin-left: 20px;
     display: flex;
     flex-direction: row;
 }
@@ -34,7 +35,6 @@
 
 .coupon-cards {
     margin-top: 20px;
-    margin-left: 20px;
     margin-right: 20px;
     width: 100%;
     height: inherit;
@@ -43,32 +43,41 @@
 }
 
 .coupon-card {
-    height: 250px;
-    width: 180px;
-    margin-left: 40px;
+    background-color: white;
+    height: 300px;
+    width: 220px;
+    margin-left: 20px;
 }
 
 .coupon-picture {
     background-color: rgb(214, 214, 214);
-    height: 150px;
-    width: 180px;
+    height: 200px;
+    width: 220px;
 }
 
 .left-coupon-part {
     float: left;
-    margin-left: 5px;
+    margin-left: 10px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
 }
 
 .right-coupon-part {
     float: right;
-    margin-right: 5px;
+    margin-right: 10px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
 }
 
 .coupon-button {
-    width: 50px;
-    height: 30px;
+    border-width: 1px;
+    display: flex;
+    align-content: center;
+    background-color: white;
+    color: rgb(163, 163, 163);
+    width: 100px;
+    height: 20px;
+    font-size: 15px;
 }
