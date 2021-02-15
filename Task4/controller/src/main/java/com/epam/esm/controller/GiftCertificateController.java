@@ -6,6 +6,7 @@ import com.epam.esm.dto.representation.OrderRepresentationDto;
 import com.epam.esm.error.ErrorCode;
 import com.epam.esm.error.ErrorHandler;
 import com.epam.esm.exception.ResultNotFoundException;
+import com.epam.esm.hateoas.HateoasCertificateManager;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.UserService;
 import com.epam.esm.util.CurrentPrincipalDefiner;
@@ -24,15 +25,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.*;
 
-import static com.epam.esm.hateoas.HateoasCertificateManager.manageCertificatesLinks;
-import static com.epam.esm.hateoas.HateoasCertificateManager.manageSpecificCertificateLinks;
-
 @RestController
 @RequestMapping("certificates")
 public class GiftCertificateController {
     private GiftCertificateService giftCertificateService;
     private UserService userService;
     private CurrentPrincipalDefiner principalDefiner;
+    private HateoasCertificateManager hateoasCertificateManager;
 
     @Autowired
     public void setGiftCertificateService(GiftCertificateService giftCertificateService) {
@@ -45,6 +44,11 @@ public class GiftCertificateController {
     }
 
     @Autowired
+    public void setHateoasCertificateManager(HateoasCertificateManager hateoasCertificateManager) {
+        this.hateoasCertificateManager = hateoasCertificateManager;
+    }
+
+    @Autowired
     public void setPrincipalDefiner(CurrentPrincipalDefiner principalDefiner) {
         this.principalDefiner = principalDefiner;
     }
@@ -53,7 +57,7 @@ public class GiftCertificateController {
     public Page<GiftCertificateRepresentationDto> showCertificates(@PageableDefault(
             sort = "id", direction = Sort.Direction.DESC) Pageable pageable) throws ResultNotFoundException {
         Page<GiftCertificateRepresentationDto> pageCertificates = giftCertificateService.findAll(pageable);
-        manageCertificatesLinks(pageCertificates);
+        hateoasCertificateManager.manageCertificatesLinks(pageCertificates);
         return pageCertificates;
     }
 
@@ -61,7 +65,7 @@ public class GiftCertificateController {
     public ResponseEntity<GiftCertificateRepresentationDto> showCertificates(@PathVariable String id)
             throws ResultNotFoundException {
         GiftCertificateRepresentationDto certificate = giftCertificateService.findById(id);
-        manageSpecificCertificateLinks(certificate);
+        hateoasCertificateManager.manageSpecificCertificateLinks(certificate);
         return new ResponseEntity<>(certificate, HttpStatus.OK);
     }
 

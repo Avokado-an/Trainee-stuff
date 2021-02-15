@@ -6,19 +6,16 @@ import com.epam.esm.exception.ResultNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
-
-import java.util.Optional;
+import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@Component
 public class HateoasCertificateManager {
     private static final String CERTIFICATES = "certificates";
 
-    private HateoasCertificateManager() {
-    }
-
-    public static void manageSpecificCertificateLinks(GiftCertificateRepresentationDto certificate) throws ResultNotFoundException {
+    public void manageSpecificCertificateLinks(GiftCertificateRepresentationDto certificate) throws ResultNotFoundException {
         Link selfLink = linkTo(methodOn(GiftCertificateController.class)
                 .showCertificates(certificate.getId().toString())).withSelfRel();
         Link certificatesLink = linkTo(methodOn(GiftCertificateController.class)
@@ -27,7 +24,7 @@ public class HateoasCertificateManager {
 
     }
 
-    public static void manageCertificatesLinks(Page<GiftCertificateRepresentationDto> pageCertificates) throws ResultNotFoundException {
+    public void manageCertificatesLinks(Page<GiftCertificateRepresentationDto> pageCertificates) throws ResultNotFoundException {
         for (GiftCertificateRepresentationDto certificate : pageCertificates) {
             Link selfLink = linkTo(methodOn(GiftCertificateController.class)
                     .showCertificates(certificate.getId().toString())).withSelfRel();

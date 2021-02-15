@@ -5,6 +5,7 @@ import com.epam.esm.dto.IdDto;
 import com.epam.esm.dto.representation.TagRepresentationDto;
 import com.epam.esm.error.ErrorCode;
 import com.epam.esm.error.ErrorHandler;
+import com.epam.esm.hateoas.HateoasTagManager;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,15 +17,19 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 import java.util.Set;
 
-import static com.epam.esm.hateoas.HateoasTagManager.manageTagLinks;
 
 @RestController
 @RequestMapping("tags")
 public class TagCertificateController {
     private TagService tagService;
+    private HateoasTagManager hateoasTagManager;
+
+    @Autowired
+    public void setHateoasTagManager(HateoasTagManager hateoasTagManager) {
+        this.hateoasTagManager = hateoasTagManager;
+    }
 
     @Autowired
     public void setTagServiceImplementation(TagService tagService) {
@@ -35,7 +40,7 @@ public class TagCertificateController {
     @Secured({"ROLE_CLIENT", "ROLE_ADMIN"})
     public Page<TagRepresentationDto> showTags(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<TagRepresentationDto> tags = tagService.viewAll(pageable);
-        manageTagLinks(tags, pageable);
+        hateoasTagManager.manageTagLinks(tags, pageable);
         return tags;
     }
 
