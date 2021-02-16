@@ -1,0 +1,38 @@
+plugins {
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+    id 'war'
+}
+
+war {
+    logger.lifecycle "war.archivePath = $war.archivePath"
+    enabled = true
+}
+
+jar {
+    enabled = true
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+    maven { url "http://repo.spring.io/release" }
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: '5.2.12.RELEASE'
+    compile 'org.apache.commons:commons-dbcp2:2.8.0'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.4'
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '5.0.6.RELEASE'
+    compile group: 'org.modelmapper', name: 'modelmapper', version: '0.7.5'
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
+    compile 'org.apache.tomcat:tomcat-catalina:7.0.39'
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+    compile group: 'org.springframework', name: 'spring-core', version: '5.2.12.RELEASE'
+    compile(project(':domain'))
+    compile(project(':service'))
+}
