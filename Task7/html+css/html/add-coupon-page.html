@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <title>Certificates</title>
     <link rel="stylesheet" href="../css/basic-styles.css">
     <link rel="stylesheet" href="../css/add-coupon-page.css">
     <link rel="stylesheet" href="../css/navbar.css">
@@ -13,7 +14,7 @@
     <div class="navbar">
         <div>
             <div class="navbar-item nav-item-img">
-                <svg xmlns="http://www.w3.org/2000/svg" clheight="50" viewBox="0 0 24 24" width="50">
+                <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 24 24" width="50">
                 <path d="M0 0h24v24H0z" fill="none"/>
                 <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
             </svg>
@@ -55,20 +56,20 @@
         <div class="add-coupon-input-form">
             <div class="coupon-left-part-form">
                 <label class="m-top-10 light-grey-text" for="company">Company</label>
-                <input class="coupon-input m-top-10" type="text" name="company">
+                <input class="coupon-input m-top-10" type="text" id="company">
                 <label class="m-top-10 light-grey-text" for="category">Category</label>
-                <select class="select-category" name="option">
+                <select class="select-category" id="category">
                         <option value="" disabled selected>Category</option>
                         <option value="1">Option 1</option>
                         <option value="2">Option 2</option>
                         <option value="3">Option 3</option>
                     </select>
                 <label class="m-top-10 light-grey-text" for="date">Valid to</label>
-                <input class="coupon-input m-top-10" type="date" value="" name="date">
+                <input class="coupon-input m-top-10" type="date" value="" id="date">
                 <label class="m-top-10 light-grey-text" for="price">Price</label>
-                <input class="coupon-input m-top-10" type="number" name="price">
+                <input class="coupon-input m-top-10" type="number" id="price">
                 <label class="m-top-10 light-grey-text" for="upload">Images</label>
-                <label for="upload" class="coupon-upload-file m-top-10" type="text">
+                <label for="upload" class="coupon-upload-file m-top-10">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
                         <path d="M0 0h24v24H0z" fill="none"/>
                         <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
@@ -78,11 +79,11 @@
             </div>
             <div class="coupon-right-part-form">
                 <label class="m-top-10 light-grey-text" for="item">Iten name</label>
-                <input class="coupon-input m-top-10" type="text" name="item">
+                <input class="coupon-input m-top-10" type="text" id="item">
                 <label class="m-top-10 light-grey-text" for="shortDesc">Short description</label>
-                <input class="description-input m-top-10" type="text" name="shortDesc">
+                <input class="description-input m-top-10" type="text" id="shortDesc">
                 <label class="m-top-10 light-grey-text" for="longDesc">Long description</label>
-                <input class="description-input m-top-10" type="text" name="shortDesc">
+                <input class="description-input m-top-10" type="text" id="longDesc">
                 <div class="coupon-buttons m-top-15">
                     <input class="bg-white coupon-button m-top-10 solid-text light-grey-text" type="submit" value="Back">
                     <input class="coupon-button bg-light-green m-top-10 solid-text white-text" type="submit" value="Save">

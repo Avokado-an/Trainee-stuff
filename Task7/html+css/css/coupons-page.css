@@ -34,12 +34,14 @@
 }
 
 .coupon-cards {
-    margin-top: 20px;
+    margin-left: 20px;
+    margin-top: 60px;
     margin-right: 20px;
     width: 100%;
     height: inherit;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .coupon-card {
