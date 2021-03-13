@@ -14,233 +14,125 @@
         <div>
             <div class="navbar-item nav-item-img">
                 <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 24 24" width="50">
-                <path d="M0 0h24v24H0z" fill="none"/>
-                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-            </svg>
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                </svg>
             </div>
             <div class="navbar-item font-30">Logo</div>
         </div>
         <div>
             <div class="navbar-item">
-                <input class="search-form" placeholder="Search by item name" />
+                <input class="search-form" value="" id="name-search" placeholder="Search by item name" />
                 <select class="select-form" name="option">
-                <option value="" disabled selected>All category</option>
-                <option value="1">Option 1</option>
-                <option value="2">Option 2</option>
-                <option value="3">Option 3</option>
-            </select>
+                    <option value="" disabled selected>All category</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select>
             </div>
         </div>
         <div>
             <div class="navbar-item nav-item-img">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-                <path d="M0 0h24v24H0z" fill="none"/>
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-            </svg>
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
             </div>
             <div class="navbar-item nav-item-img">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-                    <path d="M0 0h24v24H0z" fill="none"/>
-                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                        d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
                 </svg>
             </div>
             <div class="navbar-item font-20">Login | Sign up</div>
         </div>
     </div>
 
-    <div class="page-body-not-centered">
+    <div class="page-body-coupons">
         <div class="categories-line">
-            <div class="category-block">
-                <div class="category"></div>
-                <div class="category-name">Category</div>
-            </div>
-            <div class="category-block">
-                <div class="category"></div>
-                <div class="category-name">Category</div>
-            </div>
-            <div class="category-block">
-                <div class="category"></div>
-                <div class="category-name">Category</div>
-            </div>
-            <div class="category-block">
-                <div class="category"></div>
-                <div class="category-name">Category</div>
-            </div>
-            <div class="category-block">
-                <div class="category"></div>
-                <div class="category-name">Category</div>
-            </div>
-            <div class="category-block">
-                <div class="category"></div>
-                <div class="category-name">Category</div>
-            </div>
-            <div class="category-block">
-                <div class="category"></div>
-                <div class="category-name">Category</div>
-            </div>
+            <button id="chill" class="category-block" onclick="searchByTag(this.id);">
+                <img class="category" src="/img/beach.jpg">
+                <div class="tag-search">water</div>
+                <div class="category-name">
+                    <div class="margin-left-right">Chill</div>
+                </div>
+            </button>
+            <button id="photos" class="category-block" onclick="searchByTag(this.id);">
+                <img class="category" src="/img/photos.jpg">
+                <div class="tag-search">photos</div>
+                <div class="category-name">
+                    <div class="margin-left-right">Photos</div>
+                </div>
+            </button>
+            <button id="ride" class="category-block" onclick="searchByTag(this.id);">
+                <img class="category" src="/img/ride.jpg">
+                <div class="tag-search">excursion</div>
+                <div class="category-name">
+                    <div class="margin-left-right">Ride</div>
+                </div>
+            </button>
+            <button id="boi" class="category-block" onclick="searchByTag(this.id);">
+                <img class="category" src="/img/dog_chill.jpg">
+                <div class="tag-search">pet</div>
+                <div class="category-name">
+                    <div class="margin-left-right">Good boi</div>
+                </div>
+            </button>
+            <button id="forest" class="category-block" onclick="searchByTag(this.id);">
+                <img class="category" src="/img/wander_forest.jpg">
+                <div class="tag-search">nature</div>
+                <div class="category-name">
+                    <div class="margin-left-right">Wanderer</div>
+                </div>
+            </button>
         </div>
-        <div class="coupon-cards">
-            <div class="coupon-card">
-                <div class="coupon-picture"></div>
-                <div class="left-coupon-part">
-                    <div class="font-15 m-top-10">Coupon Name</div>
-                    <div class="font-10 m-top-10">Some brief description</div>
-                    <div class="font-15 m-top-15">$235</div>
-                </div>
-                <div class="right-coupon-part">
-                    <div class="m-top-10">
-                        <svg class="f-right" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="18">
-                        <path d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                    </svg>
-                    </div>
-                    <div class="font-10 m-top-10 light-grey-text m-left-15">Expires in 2 days</div>
-                    <input type="submit" class="coupon-button m-top-15 f-right" value="  Add to cart">
-                </div>
+        <div class="categories-line-loader">
+            <div class="category-block-loader"></div>
+            <div class="category-block-loader"></div>
+            <div class="category-block-loader"></div>
+            <div class="category-block-loader"></div>
+            <div class="category-block-loader"></div>
+            <div class="category-block-loader"></div>
+            <div class="category-block-loader"></div>
+        </div>
+        <div id="cards" class="coupon-cards"></div>
+        <div class="coupon-cards-loader">
+            <div class="coupon-card-loader">
+                <div class="coupon-picture-loader"></div>
+                <div class="left-coupon-part-loader"></div>
+                <div class="right-coupon-part-loader"></div>
             </div>
-            <div class="coupon-card">
-                <div class="coupon-picture"></div>
-                <div class="left-coupon-part">
-                    <div class="font-15 m-top-10">Coupon Name</div>
-                    <div class="font-10 m-top-10">Some brief description</div>
-                    <div class="font-15 m-top-15">$235</div>
-                </div>
-                <div class="right-coupon-part">
-                    <div class="m-top-10">
-                        <svg class="f-right" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="18">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                    </div>
-                    <div class="font-10 m-top-10 light-grey-text m-left-15">Expires in 2 days</div>
-                    <input type="submit" class="coupon-button m-top-15 f-right" value="  Add to cart">
-                </div>
+            <div class="coupon-card-loader">
+                <div class="coupon-picture-loader"></div>
+                <div class="left-coupon-part-loader"></div>
+                <div class="right-coupon-part-loader"></div>
             </div>
-            <div class="coupon-card">
-                <div class="coupon-picture"></div>
-                <div class="left-coupon-part">
-                    <div class="font-15 m-top-10">Coupon Name</div>
-                    <div class="font-10 m-top-10">Some brief description</div>
-                    <div class="font-15 m-top-15">$235</div>
-                </div>
-                <div class="right-coupon-part">
-                    <div class="m-top-10">
-                        <svg class="f-right" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="18">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                    </div>
-                    <div class="font-10 m-top-10 light-grey-text m-left-15">Expires in 2 days</div>
-                    <input type="submit" class="coupon-button m-top-15 f-right" value="  Add to cart">
-                </div>
+            <div class="coupon-card-loader">
+                <div class="coupon-picture-loader"></div>
+                <div class="left-coupon-part-loader"></div>
+                <div class="right-coupon-part-loader"></div>
             </div>
-            <div class="coupon-card">
-                <div class="coupon-picture"></div>
-                <div class="left-coupon-part">
-                    <div class="font-15 m-top-10">Coupon Name</div>
-                    <div class="font-10 m-top-10">Some brief description</div>
-                    <div class="font-15 m-top-15">$235</div>
-                </div>
-                <div class="right-coupon-part">
-                    <div class="m-top-10">
-                        <svg class="f-right" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="18">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                    </div>
-                    <div class="font-10 m-top-10 light-grey-text m-left-15">Expires in 2 days</div>
-                    <input type="submit" class="coupon-button m-top-15 f-right" value="  Add to cart">
-                </div>
+            <div class="coupon-card-loader">
+                <div class="coupon-picture-loader"></div>
+                <div class="left-coupon-part-loader"></div>
+                <div class="right-coupon-part-loader"></div>
             </div>
-            <div class="coupon-card">
-                <div class="coupon-picture"></div>
-                <div class="left-coupon-part">
-                    <div class="font-15 m-top-10">Coupon Name</div>
-                    <div class="font-10 m-top-10">Some brief description</div>
-                    <div class="font-15 m-top-15">$235</div>
-                </div>
-                <div class="right-coupon-part">
-                    <div class="m-top-10">
-                        <svg class="f-right" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="18">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                    </div>
-                    <div class="font-10 m-top-10 light-grey-text m-left-15">Expires in 2 days</div>
-                    <input type="submit" class="coupon-button m-top-15 f-right" value="  Add to cart">
-                </div>
+            <div class="coupon-card-loader">
+                <div class="coupon-picture-loader"></div>
+                <div class="left-coupon-part-loader"></div>
+                <div class="right-coupon-part-loader"></div>
             </div>
-            <div class="coupon-card">
-                <div class="coupon-picture"></div>
-                <div class="left-coupon-part">
-                    <div class="font-15 m-top-10">Coupon Name</div>
-                    <div class="font-10 m-top-10">Some brief description</div>
-                    <div class="font-15 m-top-15">$235</div>
-                </div>
-                <div class="right-coupon-part">
-                    <div class="m-top-10">
-                        <svg class="f-right" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="18">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                    </div>
-                    <div class="font-10 m-top-10 light-grey-text m-left-15">Expires in 2 days</div>
-                    <input type="submit" class="coupon-button m-top-15 f-right" value="  Add to cart">
-                </div>
+            <div class="coupon-card-loader">
+                <div class="coupon-picture-loader"></div>
+                <div class="left-coupon-part-loader"></div>
+                <div class="right-coupon-part-loader"></div>
             </div>
-            <div class="coupon-card">
-                <div class="coupon-picture"></div>
-                <div class="left-coupon-part">
-                    <div class="font-15 m-top-10">Coupon Name</div>
-                    <div class="font-10 m-top-10">Some brief description</div>
-                    <div class="font-15 m-top-15">$235</div>
-                </div>
-                <div class="right-coupon-part">
-                    <div class="m-top-10">
-                        <svg class="f-right" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="18">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                    </div>
-                    <div class="font-10 m-top-10 light-grey-text m-left-15">Expires in 2 days</div>
-                    <input type="submit" class="coupon-button m-top-15 f-right" value="  Add to cart">
-                </div>
-            </div>
-            <div class="coupon-card">
-                <div class="coupon-picture"></div>
-                <div class="left-coupon-part">
-                    <div class="font-15 m-top-10">Coupon Name</div>
-                    <div class="font-10 m-top-10">Some brief description</div>
-                    <div class="font-15 m-top-15">$235</div>
-                </div>
-                <div class="right-coupon-part">
-                    <div class="m-top-10">
-                        <svg class="f-right" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="18">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                    </div>
-                    <div class="font-10 m-top-10 light-grey-text m-left-15">Expires in 2 days</div>
-                    <input type="submit" class="coupon-button m-top-15 f-right" value="  Add to cart">
-                </div>
-            </div>
-            <div class="coupon-card">
-                <div class="coupon-picture"></div>
-                <div class="left-coupon-part">
-                    <div class="font-15 m-top-10">Coupon Name</div>
-                    <div class="font-10 m-top-10">Some brief description</div>
-                    <div class="font-15 m-top-15">$235</div>
-                </div>
-                <div class="right-coupon-part">
-                    <div class="m-top-10">
-                        <svg class="f-right" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="18">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                    </div>
-                    <div class="font-10 m-top-10 light-grey-text m-left-15">Expires in 2 days</div>
-                    <input type="submit" class="coupon-button m-top-15 f-right" value="  Add to cart">
-                </div>
+            <div class="coupon-card-loader">
+                <div class="coupon-picture-loader"></div>
+                <div class="left-coupon-part-loader"></div>
+                <div class="right-coupon-part-loader"></div>
             </div>
         </div>
     </div>
@@ -248,6 +140,7 @@
     <div class="footer">
 
     </div>
+    <script src="/js/coupons-page.js"></script>
 
 </body>
 

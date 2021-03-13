@@ -1,57 +1,179 @@
 .categories-line {
     width: 100%;
     background-color: rgb(214, 214, 214);
-    height: 130px;
+    height: 160px;
+    margin-bottom: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.categories-line-loader {
+    position: absolute;
+    width: 100%;
+    background-color: rgb(214, 214, 214);
+    height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition-delay: 0.15s;
+    transition-duration: 1.5s;
+    opacity: 1;
+}
+
+.tag-search {
+    display: none;
+}
+
+.tag {
+    display: none;
+}
+
+.categories-line-loader.fade {
+    position: absolute;
+    width: 100%;
+    background-color: rgb(214, 214, 214);
+    height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+}
+
 .category-block {
     display: flex;
+    width: 160px;
+    height: 120px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-left: 100px;
 }
 
-.coupons-row {
-    margin-top: 30px;
-    margin-left: 20px;
-    display: flex;
-    flex-direction: row;
+.category-block:hover>.category {
+    opacity: 0.6;
 }
 
-.category {
-    width: 50px;
-    height: 50px;
-    background-color: white;
+.category-block:hover>.category-name {
+    opacity: 1;
 }
 
 .category-name {
-    color: rgb(163, 163, 163);
-    margin-top: 5px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: black;
+    width: initial;
+    height: 40px;
+    transition: 0.4s all ease;
+    opacity: 0;
+    font-size: 18px;
+    color: white;
+}
+
+.margin-left-right {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.category-block-loader {
+    display: flex;
+    background-color: white;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 100px;
+}
+
+.category {
+    width: 160px;
+    height: 120px;
+    transition: 0.4s all ease;
+    background-color: white;
 }
 
 .coupon-cards {
     margin-left: 20px;
-    margin-top: 60px;
     margin-right: 20px;
-    width: 100%;
+    width: 80%;
     height: inherit;
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-content: space-around;
     flex-wrap: wrap;
+}
+
+.coupon-cards-loader {
+    position: absolute;
+    margin-left: 20px;
+    margin-top: 130px;
+    margin-right: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    transition-delay: 0.15s;
+    transition-duration: 1.5s;
+    opacity: 1;
+}
+
+.coupon-cards-loader.fade {
+    position: absolute;
+    margin-left: 20px;
+    margin-top: 130px;
+    margin-right: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    opacity: 0;
+    visibility: hidden;
 }
 
 .coupon-card {
     background-color: white;
     height: 300px;
     width: 220px;
+    margin-top: 16px;
+    margin-left: 40px;
+}
+
+.coupon-card-loader {
+    background-color: white;
+    height: 300px;
+    width: 220px;
+    margin-top: 86px;
     margin-left: 20px;
 }
 
+.coupon-name {
+    margin-top: 10px;
+    font: 15px;
+}
+
 .coupon-picture {
+    background-color: rgb(214, 214, 214);
+    height: 200px;
+    width: 220px;
+    overflow: hidden;
+    transition-duration: 1s;
+}
+
+.picture {
+    width: 220px;
+    height: 200px;
+    transition-duration: 1s;
+}
+
+.picture:hover {
+    transform: scale(1.3);
+}
+
+.coupon-picture-loader {
     background-color: rgb(214, 214, 214);
     height: 200px;
     width: 220px;
@@ -65,12 +187,36 @@
     flex-direction: column;
 }
 
+.left-coupon-part-loader {
+    float: left;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 90px;
+    height: 80px;
+    background-color: rgb(214, 214, 214);
+}
+
 .right-coupon-part {
     float: right;
     margin-right: 10px;
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
+}
+
+.right-coupon-part-loader {
+    float: right;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width: 90px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(214, 214, 214);
 }
 
 .coupon-button {
