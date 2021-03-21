@@ -45,6 +45,7 @@
     display: flex;
     width: 160px;
     height: 120px;
+    border: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -96,25 +97,31 @@
 }
 
 .coupon-cards {
+    position: relative;
     margin-left: 20px;
     margin-right: 20px;
+    margin-top: 16px;
     width: 80%;
-    height: inherit;
+    min-height: 700px;
+    height: auto;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-content: space-around;
+    align-content: flex-start;
     flex-wrap: wrap;
 }
 
 .coupon-cards-loader {
     position: absolute;
     margin-left: 20px;
-    margin-top: 130px;
     margin-right: 20px;
-    width: 100%;
+    margin-top: 210px;
+    width: 80%;
+    height: auto;
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-content: space-around;
     flex-wrap: wrap;
     transition-delay: 0.15s;
     transition-duration: 1.5s;
@@ -124,11 +131,14 @@
 .coupon-cards-loader.fade {
     position: absolute;
     margin-left: 20px;
-    margin-top: 130px;
     margin-right: 20px;
-    width: 100%;
+    margin-top: 210px;
+    width: 80%;
+    height: auto;
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-content: space-around;
     flex-wrap: wrap;
     opacity: 0;
     visibility: hidden;
@@ -138,7 +148,7 @@
     background-color: white;
     height: 300px;
     width: 220px;
-    margin-top: 16px;
+    margin-bottom: 30px;
     margin-left: 40px;
 }
 
@@ -146,8 +156,8 @@
     background-color: white;
     height: 300px;
     width: 220px;
-    margin-top: 86px;
-    margin-left: 20px;
+    margin-bottom: 30px;
+    margin-left: 40px;
 }
 
 .coupon-name {
@@ -170,7 +180,7 @@
 }
 
 .picture:hover {
-    transform: scale(1.3);
+    transform: scale(1.15);
 }
 
 .coupon-picture-loader {
@@ -228,4 +238,45 @@
     width: 100px;
     height: 20px;
     font-size: 15px;
+}
+
+.loading{
+    width: 150px;
+    height: 70px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ball{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: black;
+    margin: 0 10px;
+}
+
+.first{
+    animation: slide 2s  ease-in-out infinite ;
+    animation-delay: .1s;
+}
+
+.second{
+    animation: slide 2s ease-in-out infinite;
+    animation-delay: .5s;
+}
+
+.third{
+    animation: slide 2s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+@keyframes slide{
+    from{
+        transform: translateY(-30px);
+    }
+    to{
+        transform: translateY(0);
+    }
 }

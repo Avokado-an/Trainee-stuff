@@ -31,7 +31,7 @@
 .page-body-coupons {
     background-color: rgb(233, 233, 233);
     width: 100%;
-    height: initial;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;

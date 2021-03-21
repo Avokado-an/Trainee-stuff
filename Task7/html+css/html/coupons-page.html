@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="../css/body.css">
 </head>
 
-<body>
-    <div class="navbar">
+<body class="no-margin">
+    <div class="navbar m-top-15">
         <div>
             <div class="navbar-item nav-item-img">
                 <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 24 24" width="50">
@@ -51,93 +51,18 @@
     </div>
 
     <div class="page-body-coupons">
-        <div class="categories-line">
-            <button id="chill" class="category-block" onclick="searchByTag(this.id);">
-                <img class="category" src="/img/beach.jpg">
-                <div class="tag-search">water</div>
-                <div class="category-name">
-                    <div class="margin-left-right">Chill</div>
-                </div>
-            </button>
-            <button id="photos" class="category-block" onclick="searchByTag(this.id);">
-                <img class="category" src="/img/photos.jpg">
-                <div class="tag-search">photos</div>
-                <div class="category-name">
-                    <div class="margin-left-right">Photos</div>
-                </div>
-            </button>
-            <button id="ride" class="category-block" onclick="searchByTag(this.id);">
-                <img class="category" src="/img/ride.jpg">
-                <div class="tag-search">excursion</div>
-                <div class="category-name">
-                    <div class="margin-left-right">Ride</div>
-                </div>
-            </button>
-            <button id="boi" class="category-block" onclick="searchByTag(this.id);">
-                <img class="category" src="/img/dog_chill.jpg">
-                <div class="tag-search">pet</div>
-                <div class="category-name">
-                    <div class="margin-left-right">Good boi</div>
-                </div>
-            </button>
-            <button id="forest" class="category-block" onclick="searchByTag(this.id);">
-                <img class="category" src="/img/wander_forest.jpg">
-                <div class="tag-search">nature</div>
-                <div class="category-name">
-                    <div class="margin-left-right">Wanderer</div>
-                </div>
-            </button>
-        </div>
-        <div class="categories-line-loader">
-            <div class="category-block-loader"></div>
-            <div class="category-block-loader"></div>
-            <div class="category-block-loader"></div>
-            <div class="category-block-loader"></div>
-            <div class="category-block-loader"></div>
-            <div class="category-block-loader"></div>
-            <div class="category-block-loader"></div>
-        </div>
+        <div id="categories" class="categories-line"></div>
+        <div id="categories-loader" class="categories-line-loader"></div>
         <div id="cards" class="coupon-cards"></div>
-        <div class="coupon-cards-loader">
-            <div class="coupon-card-loader">
-                <div class="coupon-picture-loader"></div>
-                <div class="left-coupon-part-loader"></div>
-                <div class="right-coupon-part-loader"></div>
-            </div>
-            <div class="coupon-card-loader">
-                <div class="coupon-picture-loader"></div>
-                <div class="left-coupon-part-loader"></div>
-                <div class="right-coupon-part-loader"></div>
-            </div>
-            <div class="coupon-card-loader">
-                <div class="coupon-picture-loader"></div>
-                <div class="left-coupon-part-loader"></div>
-                <div class="right-coupon-part-loader"></div>
-            </div>
-            <div class="coupon-card-loader">
-                <div class="coupon-picture-loader"></div>
-                <div class="left-coupon-part-loader"></div>
-                <div class="right-coupon-part-loader"></div>
-            </div>
-            <div class="coupon-card-loader">
-                <div class="coupon-picture-loader"></div>
-                <div class="left-coupon-part-loader"></div>
-                <div class="right-coupon-part-loader"></div>
-            </div>
-            <div class="coupon-card-loader">
-                <div class="coupon-picture-loader"></div>
-                <div class="left-coupon-part-loader"></div>
-                <div class="right-coupon-part-loader"></div>
-            </div>
-            <div class="coupon-card-loader">
-                <div class="coupon-picture-loader"></div>
-                <div class="left-coupon-part-loader"></div>
-                <div class="right-coupon-part-loader"></div>
-            </div>
+        <div id="cards-loader" class="coupon-cards-loader"></div>
+        <div class="loading">
+            <div class="ball first"></div>
+            <div class="ball second"></div>
+            <div class="ball third"></div>
         </div>
     </div>
 
-    <div class="footer">
+    <div id="footer" class="footer">
 
     </div>
     <script src="/js/coupons-page.js"></script>
